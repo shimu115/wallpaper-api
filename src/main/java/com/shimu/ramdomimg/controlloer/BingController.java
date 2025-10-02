@@ -1,17 +1,27 @@
 package com.shimu.ramdomimg.controlloer;
 
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.shimu.ramdomimg.services.BingService;
 import com.shimu.ramdomimg.enums.ApiContains;
+import com.shimu.ramdomimg.enums.BingJsonI18nEnum;
 import com.shimu.ramdomimg.exception.RandomImgException;
 import com.shimu.ramdomimg.model.response.BingResponse;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
+import com.shimu.ramdomimg.model.response.GitHubJsonResponse;
+import com.shimu.ramdomimg.model.response.GitHubJsonResult;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.ClientAbortException;
+import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,65 +29,30 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 @RestController
 @RequestMapping("bing")
+@Slf4j
 public class BingController {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private BingService bingService;
 
     /**
      * bing 每日壁纸接口
      * @param response (无需传参)
      * @throws IOException
      */
-    @GetMapping("/getTodayWallpaper")
+    @GetMapping("/todayWallpaper")
     public void getTodayWallpaper(HttpServletResponse response) {
-        // 1. 请求 Bing 官方 JSON 接口
-        String bingApi = ApiContains.BING_PHOTO_API;
-        RestTemplate restTemplate = new RestTemplate();
-        BingResponse bing = restTemplate.getForObject(bingApi, BingResponse.class);
-
-        // 2. 拼接完整图片地址
-        assert bing != null;
-        String imageUrl = "https://www.bing.com" + bing.getImages().get(0).getUrl();
-        HttpURLConnection conn = null;
-        try {
-            conn = (HttpURLConnection) new URL(imageUrl).openConnection();
-            int status = conn.getResponseCode();
-            if (status != HttpURLConnection.HTTP_OK) {
-                response.sendError(HttpServletResponse.SC_BAD_GATEWAY);
-                return;
-            }
-        } catch (IOException e) {
-            throw new RandomImgException(e);
-        }
-
-        String contentType = conn.getContentType();
-        int contentLength = conn.getContentLength();
-
-        if (contentType != null) response.setContentType(contentType);
-        if (contentLength > 0) response.setContentLength(contentLength);
-
-        try (InputStream in = conn.getInputStream();
-             OutputStream out = response.getOutputStream()) {
-
-            byte[] buffer = new byte[8192];
-            int len;
-            while ((len = in.read(buffer)) != -1) {
-                out.write(buffer, 0, len);
-            }
-            out.flush();
-        } catch (IOException e) {
-            throw new RandomImgException(e);
-        } finally {
-            conn.disconnect();
-        }
+        bingService.getTodayWallpaper(response);
     }
 
-    // TODO bing 随机壁纸接口
-    @GetMapping("getRandomImage")
-    public void getRandomImage(HttpServletResponse response) throws IOException {
+    @GetMapping("randomImage")
+    public void getRandomImage(HttpServletResponse response,
+                               @RequestParam String i18nKey) {
+        bingService.getRandomImage(response, i18nKey);
 
     }
 }
