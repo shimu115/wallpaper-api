@@ -20,11 +20,11 @@ bing/wallpaper/random
 
 > 参数说明
 
-| param   | description     |
-|---------|-----------------|
-| i18nKey | BingJsonI18nKey |
+| param   | description                            |
+|---------|----------------------------------------|
+| i18nKey | 默认参数为zh_CN,可使用参数见 BingJsonI18nKey 枚举说明 |
 
-> 枚举说明
+> `BingJsonI18nKey` 枚举说明
 
 | 代码    | 语言            | 国家/地区               |
 | ----- | ------------- | ------------------- |
