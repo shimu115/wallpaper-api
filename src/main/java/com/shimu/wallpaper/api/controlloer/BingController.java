@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("bing")
+@RequestMapping("bing/wallpaper")
 @Slf4j
 public class BingController {
 
@@ -29,12 +29,17 @@ public class BingController {
      * @param response (无需传参)
      * @throws IOException
      */
-    @GetMapping("/todayWallpaper")
+    @GetMapping("/today")
     public void getTodayWallpaper(HttpServletResponse response) {
         bingService.getTodayWallpaper(response);
     }
 
-    @GetMapping("randomImage")
+    /**
+     * bing 随机图片
+     * @param response
+     * @param i18nKey
+     */
+    @GetMapping("/random")
     public void getRandomImage(HttpServletResponse response,
                                @RequestParam(defaultValue = "zh_CN", required = false) String i18nKey) {
         if (!bingScheduledService.isInitialized()) {

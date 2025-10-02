@@ -113,6 +113,10 @@ public class BingScheduledService {
         // 转换成实体
         List<BingWallpaperPO> entities = new ArrayList<>();
         for (GitHubJsonResponse item : data) {
+            // 排除以此域名访问的 url，此域名访问不通
+            if (StringUtils.startsWith(item.getUrl(), "https://cdn.bimg.cc")) {
+                continue;
+            }
             BingWallpaperPO entity = new BingWallpaperPO();
             entity.setId(UUID.randomUUID().toString()); // 避免锁库用 UUID
             entity.setUrl(item.getUrl());
