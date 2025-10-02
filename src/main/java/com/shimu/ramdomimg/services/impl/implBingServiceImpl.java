@@ -105,7 +105,8 @@ public class implBingServiceImpl implements BingService {
             double streamSizeMB = totalBytes / 1024.0 / 1024.0;
             log.info("图片 stream 大小: {} MB", String.format("%.2f", streamSizeMB));
         } catch (ClientAbortException e) {
-            log.warn("客户端在传输过程中断开连接，图片未传输完毕: {}, 已传输大小: {} MB", e.getMessage(), totalBytes / 1024.0 / 1024.0);
+            log.warn("传输失败: {}, 失败原因: {}", imageUrl, e.getMessage());
+            throw new RandomImgException("客户端在传输过程中断开连接，图片未传输完毕: " + e.getMessage() + "已传输大小: " + String.format("%.2f", totalBytes / 1024.0 / 1024.0) + "MB", 50003);
         } catch (IOException e) {
             throw new RandomImgException(e);
         } finally {
