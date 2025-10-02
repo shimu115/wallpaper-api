@@ -1,5 +1,6 @@
 package com.shimu.ramdomimg.component;
 
+import com.shimu.ramdomimg.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ public class WebPathFilter implements Filter {
         filterChain.doFilter(request, servletResponse);
         long endTime = System.currentTimeMillis();
         String uri = request.getRequestURI();
+        log.info("请求ip: {}", IpUtils.getClientIp(request));
         if (!StringUtils.contains(uri, "webjars") || StringUtils.contains(uri, "swagger") || StringUtils.contains(uri, "doc.html") || StringUtils.contains(uri, "v2/api")) {
             log.info("请求接口：{} =======> 请求耗时：{}ms", request.getRequestURI(), endTime - startTime);
         }
