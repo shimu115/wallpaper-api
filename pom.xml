@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.shimu.ramdomimg</groupId>
-    <artifactId>random-img</artifactId>
+    <artifactId>wallpaper-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>random-img</name>
     <description>random-img</description>
@@ -108,7 +108,7 @@
 <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
 <!--                <version>${spring-boot.version}</version>-->
 <!--                <configuration>-->
-<!--                    <mainClass>com.shimu.ramdomimg.RandomImgApplication</mainClass>-->
+<!--                    <mainClass>com.shimu.wallpaper.api.RandomImgApplication</mainClass>-->
 <!--&lt;!&ndash;                    <skip>true</skip>&ndash;&gt;-->
 <!--                </configuration>-->
 <!--                <executions>-->
@@ -151,7 +151,7 @@
                             <classifier>exec</classifier>
                             <archive>
                                 <manifest>
-                                    <mainClass>com.shimu.ramdomimg.RandomImgApplication</mainClass>
+                                    <mainClass>com.shimu.wallpaper.api.RandomImgApplication</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
