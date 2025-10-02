@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,9 @@ public class BingScheduledService {
     @Autowired
     private Executor initExecutor;
 
+    @Value("${task.wallpaper.enable:true}")
+    private boolean enable;
+
     private volatile boolean initialized = false; // 标记是否完成初始化
 
     /**
@@ -46,6 +50,16 @@ public class BingScheduledService {
      */
     @PostConstruct
     public void init() {
+        if (!enable) {
+            initialized = true;
+            return;
+        }
+        long count = repository.count();
+        if (count >= 1000) {
+            initialized = true;
+            log.info("数据库内有 {} 条数据，无需初始化", count);
+            return;
+        }
         initExecutor.execute(() -> {
             log.info("后台线程启动 Bing 壁纸数据初始化任务...");
             try {
@@ -61,9 +75,13 @@ public class BingScheduledService {
     /**
      * 定时任务：每隔 1 小时刷新一次数据
      */
-    @Scheduled(fixedDelay = 3600_000) // 每小时执行一次
+    @Scheduled(cron = "${task.wallpaper.cron:0 0 * * * ?}") // 每小时执行一次
     @Transactional
     public void refreshAllLanguages() {
+        if (!enable) {
+            initialized = true;
+            return;
+        }
         for (BingJsonI18nEnum lang : BingJsonI18nEnum.values()) {
             try {
                 refreshLanguage(lang);
@@ -71,6 +89,7 @@ public class BingScheduledService {
                 log.error("拉取 {} 失败: {}", lang.name(), e.getMessage(), e);
             }
         }
+        initialized = true;
     }
 
     private void refreshLanguage(BingJsonI18nEnum lang) throws InterruptedException {
