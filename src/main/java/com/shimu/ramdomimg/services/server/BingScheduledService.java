@@ -1,5 +1,6 @@
 package com.shimu.ramdomimg.services.server;
 
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.shimu.ramdomimg.enums.ApiContains;
@@ -15,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.ByteArrayOutputStream;
@@ -22,7 +24,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.Executor;
 
 @Slf4j
@@ -57,43 +61,69 @@ public class BingScheduledService {
     /**
      * 定时任务：每隔 1 小时刷新一次数据
      */
-    @Scheduled(fixedRate = 3600_000) // 每小时刷新一次
+    @Scheduled(fixedDelay = 3600_000) // 每小时执行一次
+    @Transactional
     public void refreshAllLanguages() {
-        for (BingJsonI18nEnum langEnum : BingJsonI18nEnum.values()) {
+        for (BingJsonI18nEnum lang : BingJsonI18nEnum.values()) {
             try {
-                String url = getBingJsonUrl(langEnum.name());
-                String resp = fetchFromGitHub(url);
-
-                GitHubJsonResult<List<GitHubJsonResponse>> gitHubJsonResult =
-                        JSONObject.parseObject(resp, new TypeReference<GitHubJsonResult<List<GitHubJsonResponse>>>() {});
-
-                if (gitHubJsonResult == null || gitHubJsonResult.getData() == null) {
-                    log.warn("⚠️ {} 数据为空", langEnum.name());
-                    continue;
-                }
-
-                // 保存到 SQLite
-                repository.deleteByI18nKey(langEnum.name()); // 删除该语言的旧数据
-                gitHubJsonResult.getData().forEach(item -> {
-                    BingWallpaperPO entity = new BingWallpaperPO();
-                    entity.setUrl(item.getUrl());
-                    entity.setCopyright(item.getCopyright());
-                    entity.setCopyrightLink(item.getCopyrightLink());
-                    entity.setHsh(item.getHsh());
-                    entity.setI18nKey(langEnum.getKey());
-                    entity.setDateTime(item.getDateTime());
-                    entity.setCreatedTime(item.getCreatedTime());
-                    entity.setTitle(item.getTitle());
-                    repository.save(entity);
-                });
-
-                log.info("{} 数据刷新完成，存储 {} 条", langEnum.name(), gitHubJsonResult.getData().size());
-
+                refreshLanguage(lang);
             } catch (Exception e) {
-                log.error("拉取 {} 失败: {}", langEnum.name(), e.getMessage());
+                log.error("拉取 {} 失败: {}", lang.name(), e.getMessage(), e);
             }
         }
-        initialized = true;
+    }
+
+    private void refreshLanguage(BingJsonI18nEnum lang) throws InterruptedException {
+        log.info("开始刷新语言: {}", lang.getKey());
+
+        // 从 GitHub 拉取 JSON
+        String resp = HttpUtil.get(getBingJsonUrl(lang.name()));
+        GitHubJsonResult<List<GitHubJsonResponse>> gitHubJsonResult =
+                JSONObject.parseObject(resp, new TypeReference<GitHubJsonResult<List<GitHubJsonResponse>>>() {});
+
+        if (gitHubJsonResult == null || gitHubJsonResult.getCode() != 200) {
+            throw new RuntimeException("请求失败");
+        }
+
+        List<GitHubJsonResponse> data = gitHubJsonResult.getData();
+        if (data == null || data.isEmpty()) {
+            log.warn("语言 {} 没有数据", lang.getKey());
+            return;
+        }
+
+        // 转换成实体
+        List<BingWallpaperPO> entities = new ArrayList<>();
+        for (GitHubJsonResponse item : data) {
+            BingWallpaperPO entity = new BingWallpaperPO();
+            entity.setId(UUID.randomUUID().toString()); // 避免锁库用 UUID
+            entity.setUrl(item.getUrl());
+            entity.setCopyright(item.getCopyright());
+            entity.setCopyrightLink(item.getCopyrightLink());
+            entity.setHsh(item.getHsh());
+            entity.setI18nKey(lang.getKey());
+            entity.setDateTime(item.getDateTime());
+            entity.setCreatedTime(item.getCreatedTime());
+            entity.setTitle(item.getTitle());
+            repository.save(entity);
+            entities.add(entity);
+        }
+
+        // 批量保存 + 重试机制
+        int retry = 3;
+        while (retry-- > 0) {
+            try {
+                repository.saveAll(entities); // 批量写入
+                log.info("语言 {} 保存成功, 条数: {}", lang.getKey(), entities.size());
+                break;
+            } catch (Exception e) {
+                if (e.getMessage() != null && e.getMessage().contains("database is locked") && retry > 0) {
+                    log.warn("数据库被锁，重试中... 剩余次数: {}", retry);
+                    Thread.sleep(500); // 等待再试
+                } else {
+                    throw e;
+                }
+            }
+        }
     }
 
     /**

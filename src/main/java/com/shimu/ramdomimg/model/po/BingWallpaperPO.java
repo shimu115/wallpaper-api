@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -11,8 +12,8 @@ import java.util.Date;
 public class BingWallpaperPO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @Column(length = 36, nullable = false, unique = true)
+    private String id = UUID.randomUUID().toString();
     private String title;
     private String url;
     private String i18nKey;

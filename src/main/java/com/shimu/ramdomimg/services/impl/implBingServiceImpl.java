@@ -43,6 +43,10 @@ public class implBingServiceImpl implements BingService {
 
     @Override
     public void getTodayWallpaper(HttpServletResponse response) {
+        streamImage(response, getTodayWallpaperUrl());
+    }
+
+    private String getTodayWallpaperUrl() {
         // 1. 请求 Bing 官方 JSON 接口
         String bingApi = ApiContains.BING_PHOTO_API;
         RestTemplate restTemplate = new RestTemplate();
@@ -50,8 +54,7 @@ public class implBingServiceImpl implements BingService {
 
         // 2. 拼接完整图片地址
         assert bing != null;
-        String imageUrl = "https://www.bing.com" + bing.getImages().get(0).getUrl();
-        streamImage(response, imageUrl);
+        return  "https://www.bing.com" + bing.getImages().get(0).getUrl();
     }
 
     @Override
@@ -72,8 +75,10 @@ public class implBingServiceImpl implements BingService {
         try {
             conn = (HttpURLConnection) new URL(imageUrl).openConnection();
             int status = conn.getResponseCode();
-            if (status != HttpURLConnection.HTTP_OK) {
-                log.error("请求失败：{}", imageUrl);
+            if (status != HttpURLConnection.HTTP_OK && !StringUtils.equals(imageUrl, getTodayWallpaperUrl())) {
+                log.error("对应链接可能已失效，默认展示今日壁纸，请求失败 url：{}", imageUrl);
+                getTodayWallpaper(response);
+            } else if (status != HttpURLConnection.HTTP_OK && StringUtils.equals(imageUrl, getTodayWallpaperUrl())) {
                 throw new RandomImgException("请求失败，对应链接可能已失效，请刷新重试！", 50002);
             }
         } catch (IOException e) {
