@@ -22,6 +22,12 @@ public class RandomImgException extends RuntimeException {
         this.code = code;
     }
 
+    public RandomImgException(String message) {
+        super(message);
+        this.message = message;
+        this.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
+    }
+
     public RandomImgException(Throwable cause) {
         super(cause);
         this.code = HttpStatus.INTERNAL_SERVER_ERROR.value();
