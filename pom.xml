@@ -122,7 +122,7 @@
                             <classifier>exec</classifier>
                             <archive>
                                 <manifest>
-                                    <mainClass>com.shimu.wallpaper.api.RandomImgApplication</mainClass>
+                                    <mainClass>com.shimu.wallpaper.api.WallpaperApiApplication</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
