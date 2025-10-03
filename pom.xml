@@ -5,8 +5,8 @@
     <groupId>com.shimu.ramdomimg</groupId>
     <artifactId>wallpaper-api</artifactId>
     <version>1.0.0</version>
-    <name>random-img</name>
-    <description>random-img</description>
+    <name>wallpaper-api</name>
+    <description>壁纸 api 接口</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -92,35 +92,6 @@
     </dependencyManagement>
 
     <build>
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <version>3.8.1</version>-->
-<!--                <configuration>-->
-<!--                    <source>1.8</source>-->
-<!--                    <target>1.8</target>-->
-<!--                    <encoding>UTF-8</encoding>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--                <version>${spring-boot.version}</version>-->
-<!--                <configuration>-->
-<!--                    <mainClass>com.shimu.wallpaper.api.RandomImgApplication</mainClass>-->
-<!--&lt;!&ndash;                    <skip>true</skip>&ndash;&gt;-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>repackage</id>-->
-<!--                        <goals>-->
-<!--                            <goal>repackage</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
         <plugins>
             <!-- 编译插件 -->
             <plugin>
