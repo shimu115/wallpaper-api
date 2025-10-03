@@ -1,6 +1,6 @@
 package com.shimu.wallpaper.api.controlloer;
 
-import com.shimu.wallpaper.api.exception.RandomImgException;
+import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.services.BingService;
 import com.shimu.wallpaper.api.services.server.BingScheduledService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,7 @@ public class BingController {
     public void getRandomImage(HttpServletResponse response,
                                @RequestParam(defaultValue = "zh_CN", required = false) String i18nKey) {
         if (!bingScheduledService.isInitialized()) {
-            throw new RandomImgException("未完成初始化，请稍后~~~", 10000);
+            throw new WallpaperApiException("未完成初始化，请稍后~~~", 10000);
         }
         bingService.getRandomImage(response, i18nKey);
     }

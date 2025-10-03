@@ -1,7 +1,7 @@
 package com.shimu.wallpaper.api.config;
 
 import com.alibaba.fastjson.JSON;
-import com.shimu.wallpaper.api.exception.RandomImgException;
+import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -46,8 +46,8 @@ public class TryCatchGlobalException {
         return ResultUtils.error(HttpStatus.NOT_FOUND.getReasonPhrase(), HttpStatus.NOT_FOUND.value());
     }
 
-    @ExceptionHandler(RandomImgException.class)
-    public ResultUtils testExceptionHandler(RandomImgException e, HttpServletRequest request, HttpServletResponse response) {
+    @ExceptionHandler(WallpaperApiException.class)
+    public ResultUtils testExceptionHandler(WallpaperApiException e, HttpServletRequest request, HttpServletResponse response) {
         log.error("请求参数：{}", JSON.toJSONString(request.getParameterMap()));
         log.error("错误信息：{}", e.getMessage());
         log.error("请求头信息：{}", JSON.toJSONString(request.getHeaderNames()));

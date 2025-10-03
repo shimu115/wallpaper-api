@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.shimu.wallpaper.api.enums.ApiContains;
 import com.shimu.wallpaper.api.enums.BingJsonI18nEnum;
-import com.shimu.wallpaper.api.exception.RandomImgException;
+import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.model.po.BingWallpaperPO;
 import com.shimu.wallpaper.api.model.response.GitHubJsonResponse;
 import com.shimu.wallpaper.api.model.response.GitHubJsonResult;
@@ -167,7 +167,7 @@ public class BingScheduledService {
     private String getBingJsonUrl (String i18nKey) {
         BingJsonI18nEnum enumResult = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
         if (enumResult == null) {
-            throw new RandomImgException("无效参数");
+            throw new WallpaperApiException("无效参数");
         }
         return StringUtils.replace(ApiContains.BING_GITHUB_JSON, "{i18n_key}", enumResult.getKey());
     }

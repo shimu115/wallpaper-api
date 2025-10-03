@@ -4,7 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
 import com.shimu.wallpaper.api.enums.ApiContains;
 import com.shimu.wallpaper.api.enums.BingJsonI18nEnum;
-import com.shimu.wallpaper.api.exception.RandomImgException;
+import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.model.po.BingWallpaperPO;
 import com.shimu.wallpaper.api.model.response.BingResponse;
 import com.shimu.wallpaper.api.repository.BingWallpaperRepository;
@@ -28,7 +28,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class implBingServiceImpl implements BingService {
+public class BingServiceImpl implements BingService {
 
     @Autowired
     private BingScheduledService bingScheduledService;
@@ -57,7 +57,7 @@ public class implBingServiceImpl implements BingService {
         BingJsonI18nEnum i18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
         List<BingWallpaperPO> list = repository.findByI18nKey(i18nEnum.getKey());
         if (list.isEmpty()) {
-            throw new RandomImgException("暂无数据，请稍后再试", 50001);
+            throw new WallpaperApiException("暂无数据，请稍后再试", 50001);
         }
         int randomInt = RandomUtil.randomInt(0, list.size());
         BingWallpaperPO bingWallpaperPO = list.get(randomInt);
@@ -74,10 +74,10 @@ public class implBingServiceImpl implements BingService {
                 log.error("对应链接可能已失效，默认展示今日壁纸，请求失败 url：{}", imageUrl);
                 getTodayWallpaper(response);
             } else if (status != HttpURLConnection.HTTP_OK && StringUtils.equals(imageUrl, getTodayWallpaperUrl())) {
-                throw new RandomImgException("请求失败，对应链接可能已失效，请刷新重试！", 50002);
+                throw new WallpaperApiException("请求失败，对应链接可能已失效，请刷新重试！", 50002);
             }
         } catch (IOException e) {
-            throw new RandomImgException(e);
+            throw new WallpaperApiException(e);
         }
 
         String contentType = conn.getContentType();
@@ -106,9 +106,9 @@ public class implBingServiceImpl implements BingService {
             log.info("图片 stream 大小: {} MB", String.format("%.2f", streamSizeMB));
         } catch (ClientAbortException e) {
             log.warn("传输失败: {}, 失败原因: {}", imageUrl, e.getMessage());
-            throw new RandomImgException("客户端在传输过程中断开连接，图片未传输完毕: " + e.getMessage() + "已传输大小: " + String.format("%.2f", totalBytes / 1024.0 / 1024.0) + "MB", 50003);
+            throw new WallpaperApiException("客户端在传输过程中断开连接，图片未传输完毕: " + e.getMessage() + "已传输大小: " + String.format("%.2f", totalBytes / 1024.0 / 1024.0) + "MB", 50003);
         } catch (IOException e) {
-            throw new RandomImgException(e);
+            throw new WallpaperApiException(e);
         } finally {
             conn.disconnect();
         }
