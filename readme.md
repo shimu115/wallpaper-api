@@ -5,17 +5,21 @@
 
 ### api
 
-#### 今日壁纸
+> 整体api前都需要加上 `/api`
+
+#### bing
+
+##### 今日壁纸
 
 ~~~
-bing/wallpaper/today
+/bing/wallpaper/today
 ~~~
 
 无需传参
 
-#### 随机壁纸
+##### 随机壁纸
 ~~~
-bing/wallpaper/random
+/bing/wallpaper/random
 ~~~
 
 > 参数说明
@@ -36,3 +40,13 @@ bing/wallpaper/random
 | fr_FR | 法语 (French)   | 法国 (France)         |
 | ja_JP | 日语 (Japanese) | 日本 (Japan)          |
 | zh_CN | 中文 (Chinese)  | 中国 (China)          |
+
+#### acg
+
+##### 随机acg图片
+
+~~~
+/acg/wallpaper/random
+~~~
+
+无需传参
