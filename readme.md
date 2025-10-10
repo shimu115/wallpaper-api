@@ -41,6 +41,11 @@
 | ja_JP | 日语 (Japanese) | 日本 (Japan)          |
 | zh_CN | 中文 (Chinese)  | 中国 (China)          |
 
+##### 手动刷新数据
+~~~
+/bing/wallpaper/fresh_data
+~~~
+
 #### acg
 
 ##### 随机acg图片

@@ -3,6 +3,7 @@ package com.shimu.wallpaper.api.controlloer;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.services.BingService;
 import com.shimu.wallpaper.api.services.server.BingScheduledService;
+import com.shimu.wallpaper.api.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ public class BingController {
 
     /**
      * bing 每日壁纸接口
+     *
      * @param response (无需传参)
      * @throws IOException
      */
@@ -36,6 +38,7 @@ public class BingController {
 
     /**
      * bing 随机图片
+     *
      * @param response
      * @param i18nKey
      */
@@ -48,9 +51,9 @@ public class BingController {
         bingService.getRandomImage(response, i18nKey);
     }
 
-//    @GetMapping("/json")
-//    public String getBingJson() {
-//        String json = bingScheduledService.getWallpapersJson();
-//        return json != null ? json : "{\"msg\":\"数据尚未加载，请稍后再试\"}";
-//    }
+    @GetMapping("fresh_data")
+    public ResultUtils<Void> freshData() {
+        bingScheduledService.refreshAllLanguages();
+        return ResultUtils.success();
+    }
 }

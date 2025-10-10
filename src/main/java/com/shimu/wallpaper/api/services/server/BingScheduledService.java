@@ -1,6 +1,10 @@
 package com.shimu.wallpaper.api.services.server;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.shimu.wallpaper.api.enums.ApiContains;
@@ -13,8 +17,10 @@ import com.shimu.wallpaper.api.repository.BingWallpaperRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,10 +31,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -89,16 +94,25 @@ public class BingScheduledService {
                 log.error("拉取 {} 失败: {}", lang.name(), e.getMessage(), e);
             }
         }
+        log.info("刷新数据后，共有 {} 条数据", repository.count());
         initialized = true;
     }
 
     private void refreshLanguage(BingJsonI18nEnum lang) throws InterruptedException {
         log.info("开始刷新语言: {}", lang.getKey());
-
         // 从 GitHub 拉取 JSON
         String resp = HttpUtil.get(getBingJsonUrl(lang.name()));
         GitHubJsonResult<List<GitHubJsonResponse>> gitHubJsonResult =
                 JSONObject.parseObject(resp, new TypeReference<GitHubJsonResult<List<GitHubJsonResponse>>>() {});
+
+        List<BingWallpaperPO> exiting = repository.findByI18nKey(lang.getKey());
+
+        Map<String, BingWallpaperPO> exitingMap = exiting.stream()
+                .collect(Collectors.toMap(
+                        BingWallpaperPO::getHsh,
+                        e -> e,
+                        (existing, replacement) -> existing  // 保留第一个
+                ));
 
         if (gitHubJsonResult == null || gitHubJsonResult.getCode() != 200) {
             throw new RuntimeException("请求失败");
@@ -113,22 +127,24 @@ public class BingScheduledService {
         // 转换成实体
         List<BingWallpaperPO> entities = new ArrayList<>();
         for (GitHubJsonResponse item : data) {
-            // 排除以此域名访问的 url，此域名访问不通
-            if (StringUtils.startsWith(item.getUrl(), "https://cdn.bimg.cc")) {
-                continue;
+            if (!exitingMap.containsKey(item.getHsh())) {
+                // 排除以此域名访问的 url，此域名访问不通
+                if (StringUtils.startsWith(item.getUrl(), "https://cdn.bimg.cc")) {
+                    continue;
+                }
+                BingWallpaperPO entity = new BingWallpaperPO();
+                entity.setId(UUID.randomUUID().toString()); // 避免锁库用 UUID
+                entity.setUrl(item.getUrl());
+                entity.setCopyright(item.getCopyright());
+                entity.setCopyrightLink(item.getCopyrightLink());
+                entity.setHsh(item.getHsh());
+                entity.setI18nKey(lang.getKey());
+                entity.setDateTime(item.getDateTime());
+                entity.setCreatedTime(item.getCreatedTime());
+                entity.setTitle(item.getTitle());
+                repository.save(entity);
+                entities.add(entity);
             }
-            BingWallpaperPO entity = new BingWallpaperPO();
-            entity.setId(UUID.randomUUID().toString()); // 避免锁库用 UUID
-            entity.setUrl(item.getUrl());
-            entity.setCopyright(item.getCopyright());
-            entity.setCopyrightLink(item.getCopyrightLink());
-            entity.setHsh(item.getHsh());
-            entity.setI18nKey(lang.getKey());
-            entity.setDateTime(item.getDateTime());
-            entity.setCreatedTime(item.getCreatedTime());
-            entity.setTitle(item.getTitle());
-            repository.save(entity);
-            entities.add(entity);
         }
 
         // 批量保存 + 重试机制
