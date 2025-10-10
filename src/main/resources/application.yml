@@ -24,4 +24,8 @@ spring:
 task:
   wallpaper:
     cron: "0 0 */1 * * ?"
-    enable: false
+    enable: true
+
+mirror:
+  github:
+    - https://hub.gitmirror.com/raw.githubusercontent.com

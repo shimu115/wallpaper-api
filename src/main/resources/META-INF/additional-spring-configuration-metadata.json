@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "mirror.github",
+      "type": "java.lang.String",
+      "description": "GitHub mirror array."
+    },
+    {
+      "name": "task.wallpaper.cron",
+      "type": "java.lang.String",
+      "description": "GitHub data source automatically updates data."
+    },
+    {
+      "name": "task.wallpaper.enable",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable scheduled update task."
+    }
+  ]
+}

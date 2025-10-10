@@ -50,3 +50,10 @@
 ~~~
 
 无需传参
+
+## docker 构建与部署
+### 构建 docker 镜像
+使用命令
+~~~ bash
+docker build -t wallpaper-api:1.0.0 .
+~~~
