@@ -87,6 +87,7 @@ public class BingScheduledService {
             initialized = true;
             return;
         }
+        log.info("<===================> 开始刷新数据 <===================>");
         for (BingJsonI18nEnum lang : BingJsonI18nEnum.values()) {
             try {
                 refreshLanguage(lang);
