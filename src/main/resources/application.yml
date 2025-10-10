@@ -4,6 +4,9 @@ server:
     context-path: /api
 
 spring:
+  banner:
+    charset: UTF-8
+    location: classpath:banner.txt
   datasource:
     url: jdbc:sqlite:./bing-wallpaper.db
     driver-class-name: org.sqlite.JDBC
