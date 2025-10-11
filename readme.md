@@ -75,8 +75,8 @@ docker build -t wallpaper-api:1.0.0 .
 docker run -d \
   -p 9123:9123 \
   --name wallpaper-api \
-  wallpaper-api:1.0.0 \
-  restart=unless-stopped
+  --restart=unless-stopped \
+  wallpaper-api:1.0.0
 ~~~
 > **docker compose 创建容器**
 ~~~yaml
