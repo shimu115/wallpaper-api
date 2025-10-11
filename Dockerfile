@@ -8,7 +8,7 @@ LABEL maintainer="xxxxx@gmail.com"
 WORKDIR /workspace
 
 # 将 jar 包复制进容器 (自行修改wallpaper-api-1.0.0.jar的所在路径)
-COPY wallpaper-api-1.0.0.jar wallpaper-api.jar
+COPY target/wallpaper-api-1.0.0.jar wallpaper-api.jar
 
 # 容器暴露的端口（根据你 Spring Boot 的 server.port）
 EXPOSE 9123
