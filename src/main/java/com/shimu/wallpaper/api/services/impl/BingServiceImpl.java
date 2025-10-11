@@ -12,21 +12,17 @@ import com.shimu.wallpaper.api.services.BingService;
 import com.shimu.wallpaper.api.services.server.BingScheduledService;
 import com.shimu.wallpaper.api.utils.StreamResponseUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.ClientAbortException;
 import org.apache.commons.lang3.EnumUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
+/**
+ * bing 壁纸业务代码
+ */
 @Service
 @Slf4j
 public class BingServiceImpl implements BingService {
@@ -37,6 +33,10 @@ public class BingServiceImpl implements BingService {
     @Autowired
     private BingWallpaperRepository repository;
 
+    /**
+     * 获取今日壁纸
+     * @param response
+     */
     @Override
     public void getTodayWallpaper(HttpServletResponse response) {
         StreamResponseUtils.streamImage(response, getTodayWallpaperUrl());
@@ -53,6 +53,11 @@ public class BingServiceImpl implements BingService {
         return  "https://www.bing.com" + bing.getImages().get(0).getUrl();
     }
 
+    /**
+     * 获取随机壁纸
+     * @param response
+     * @param i18nKey
+     */
     @Override
     public void getRandomImage(HttpServletResponse response, String i18nKey) {
         BingJsonI18nEnum i18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);

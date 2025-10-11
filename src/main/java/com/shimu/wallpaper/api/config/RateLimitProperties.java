@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * 限流配置 TODO 待完善
+ */
 @Data
 @Component
 @ConfigurationProperties(prefix = "rate-limit")

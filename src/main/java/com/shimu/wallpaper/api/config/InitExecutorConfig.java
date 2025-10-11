@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+ * 初始化连接池，用于初始化数据
+ */
 @Configuration
 public class InitExecutorConfig {
 

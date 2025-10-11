@@ -3,6 +3,9 @@ package com.shimu.wallpaper.api.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 对应 github 多国壁纸的文件名
+ */
 @Getter
 @AllArgsConstructor
 public enum BingJsonI18nEnum {

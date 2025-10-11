@@ -18,6 +18,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * 图片流处理工具类
+ */
 @Slf4j
 @Component
 public class StreamResponseUtils {

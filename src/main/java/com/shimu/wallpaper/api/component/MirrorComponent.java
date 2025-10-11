@@ -2,17 +2,18 @@ package com.shimu.wallpaper.api.component;
 
 import com.alibaba.fastjson.JSON;
 import com.shimu.wallpaper.api.utils.HttpUtils;
-import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+/**
+ * github 镜像地址
+ */
 @Component
 @ConfigurationProperties(prefix = "mirror")
 @Data

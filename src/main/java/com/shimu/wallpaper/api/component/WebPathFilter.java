@@ -13,10 +13,7 @@ import java.io.IOException;
 /**
  * @author shimu
  * @version 1.0
- * @description TODO
- * @date 2024-03-31 12:42
  */
-//@WebFilter(urlPatterns = {"/api/*"}, filterName = "testFilter")
 @Slf4j
 @Component
 @WebFilter

@@ -11,20 +11,21 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
+/**
+ * acg 图片业务代码
+ * @author shimu
+ */
 @Service
 @Slf4j
 public class AcgServiceImpl implements AcgService {
     @Override
     public void random(HttpServletResponse response, HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
-//        String url = HttpUtil.get(ApiContains.ACG_WALLPAPER_API);
-//        StreamResponseUtils.streamImage(response, url);
         log.info("userAgent:{}", userAgent);
         HttpURLConnection conn = null;
         StringBuilder result = new StringBuilder();
@@ -39,7 +40,7 @@ public class AcgServiceImpl implements AcgService {
             }
 
             try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     result.append(line);

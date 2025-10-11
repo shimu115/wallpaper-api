@@ -16,10 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
+ * 全局异常处理
  * @author shimu
  * @version 1.0
- * @description TODO
- * @date 2024-04-12 11:22
  */
 @RestControllerAdvice
 @Slf4j

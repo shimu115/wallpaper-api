@@ -1,17 +1,10 @@
 package com.shimu.wallpaper.api.enums;
 
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
 import com.shimu.wallpaper.api.component.MirrorComponent;
-import com.shimu.wallpaper.api.utils.HttpUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
-
+/**
+ * 存放第三方 api 地址
+ */
 public class ApiContains {
 
     // https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN

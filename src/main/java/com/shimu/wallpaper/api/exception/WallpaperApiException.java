@@ -4,9 +4,9 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 /**
+ * 自定义异常
  * @author shimu
  * @version 1.0
- * @description TODO
  * @date 2024-03-31 12:24
  */
 @Data

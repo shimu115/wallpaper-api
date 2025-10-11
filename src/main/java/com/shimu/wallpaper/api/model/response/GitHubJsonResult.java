@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * GitHub json 结果
+ * @param <T>
+ */
 @Data
 public class GitHubJsonResult <T> {
 

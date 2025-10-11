@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * bing 今日图片对应数据结构
+ */
 @Data
 public class BingResponse {
 

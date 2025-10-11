@@ -2,6 +2,9 @@ package com.shimu.wallpaper.api.utils;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 获取客户端 IP
+ */
 public class IpUtils {
 
     public static String getClientIp(HttpServletRequest request) {

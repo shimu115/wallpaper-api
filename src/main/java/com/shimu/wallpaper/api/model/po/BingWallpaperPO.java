@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * 数据库对应实体
+ */
 @Data
 @Entity
 @Table(name = "bing_wallpaper")

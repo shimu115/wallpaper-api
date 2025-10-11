@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+/**
+ * bing 数据原备份数据库
+ */
 public interface BingWallpaperRepository extends JpaRepository<BingWallpaperPO, Long> {
 
     void deleteByI18nKey(String i18nKey);

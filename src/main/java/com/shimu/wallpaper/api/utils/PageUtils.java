@@ -6,6 +6,11 @@ import lombok.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 分页工具类
+ * @param <T>
+ */
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Data

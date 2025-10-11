@@ -7,6 +7,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * github 数据源对应的数据结构
+ */
 @Data
 public class GitHubJsonResponse {
 

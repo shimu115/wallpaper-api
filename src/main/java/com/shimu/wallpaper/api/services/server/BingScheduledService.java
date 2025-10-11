@@ -1,10 +1,6 @@
 package com.shimu.wallpaper.api.services.server;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.http.HttpUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.shimu.wallpaper.api.enums.ApiContains;
@@ -14,13 +10,12 @@ import com.shimu.wallpaper.api.model.po.BingWallpaperPO;
 import com.shimu.wallpaper.api.model.response.GitHubJsonResponse;
 import com.shimu.wallpaper.api.model.response.GitHubJsonResult;
 import com.shimu.wallpaper.api.repository.BingWallpaperRepository;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.core.CollectionUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +43,7 @@ public class BingScheduledService {
     @Value("${task.wallpaper.enable:true}")
     private boolean enable;
 
+    @Getter
     private volatile boolean initialized = false; // 标记是否完成初始化
 
     /**
@@ -150,7 +146,7 @@ public class BingScheduledService {
 
         // 批量保存 + 重试机制
         int retry = 3;
-        while (retry-- > 0) {
+        while ((retry = retry - 1) > 0) {
             try {
                 repository.saveAll(entities); // 批量写入
                 log.info("语言 {} 保存成功, 条数: {}", lang.getKey(), entities.size());
@@ -189,7 +185,4 @@ public class BingScheduledService {
         return StringUtils.replace(ApiContains.BING_GITHUB_JSON, "{i18n_key}", enumResult.getKey());
     }
 
-    public boolean isInitialized() {
-        return initialized;
-    }
 }
