@@ -44,7 +44,7 @@ public class BingController {
      */
     @GetMapping("/random")
     public void getRandomImage(HttpServletResponse response,
-                               @RequestParam(defaultValue = "zh_CN", required = false) String i18nKey) {
+                               @RequestParam(required = false) String i18nKey) {
         if (!bingScheduledService.isInitialized()) {
             throw new WallpaperApiException("未完成初始化，请稍后~~~", 10000);
         }
