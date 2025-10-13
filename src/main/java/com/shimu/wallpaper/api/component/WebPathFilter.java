@@ -24,10 +24,10 @@ public class WebPathFilter implements Filter {
             throws IOException, ServletException {
         long startTime = System.currentTimeMillis();
         HttpServletRequest request = (HttpServletRequest) servletRequest;
+        log.info("<==================== 请求ip: {} ====================>", IpUtils.getClientIp(request));
         filterChain.doFilter(request, servletResponse);
         long endTime = System.currentTimeMillis();
         String uri = request.getRequestURI();
-        log.info("<==================== 请求ip: {} ====================>", IpUtils.getClientIp(request));
         if (!StringUtils.contains(uri, "webjars") || StringUtils.contains(uri, "swagger") || StringUtils.contains(uri, "doc.html") || StringUtils.contains(uri, "v2/api")) {
             log.info("请求接口：{} =======> 请求耗时：{}ms", request.getRequestURI(), endTime - startTime);
         }
