@@ -75,9 +75,11 @@ public class BingServiceImpl implements BingService {
             i18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
             list = repository.findByI18nKey(i18nEnum.getKey());
         } else {
-            list = repository.findAll();
+            BingJsonI18nEnum[] values = BingJsonI18nEnum.values();
+            i18nEnum = values[RandomUtil.randomInt(0, values.length)];
+            list = repository.findByI18nKey(i18nEnum.getKey());
         }
-        log.info("i18nEnum:{}", i18nEnum == null ? null : i18nEnum.toString());
+        log.info("i18nEnum:{}", i18nEnum);
         log.info("查出结果 {} 条", list.size());
         if (list.isEmpty()) {
             throw new WallpaperApiException("暂无数据，请稍后再试", 50001);
