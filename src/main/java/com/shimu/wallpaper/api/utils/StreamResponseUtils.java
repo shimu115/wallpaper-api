@@ -65,11 +65,6 @@ public class StreamResponseUtils {
                 totalBytes += len;
             }
             out.flush();
-            // 使用日志打印图片大小
-            if (contentLength > 0) {
-                double sizeMB = contentLength / 1024.0 / 1024.0;
-                log.info("图片 header 大小: {} MB", String.format("%.2f", sizeMB));
-            }
             double streamSizeMB = totalBytes / 1024.0 / 1024.0;
             log.info("图片 stream 大小: {} MB", String.format("%.2f", streamSizeMB));
         } catch (ClientAbortException e) {
