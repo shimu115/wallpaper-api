@@ -42,7 +42,7 @@ public class BingController {
      */
     @GetMapping("/random")
     public void getRandomImage(HttpServletResponse response,
-                               @RequestHeader(value = "User-Agent", required = false) String userAgent,
+                               @RequestHeader(value = "User-Agent") String userAgent,
                                @RequestParam(required = false) String i18nKey,
                                @RequestParam(required = false, defaultValue = "1920") Integer width,
                                @RequestParam(required = false, defaultValue = "1080") Integer height) {
