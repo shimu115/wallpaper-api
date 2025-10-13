@@ -88,3 +88,9 @@ services:
       - 9123:9123
     restart: unless-stopped
 ~~~
+
+## License
+This project is licensed under the [Apache License 2.0](LICENSE).
+
+Copyright © 2025 Shimu
+
