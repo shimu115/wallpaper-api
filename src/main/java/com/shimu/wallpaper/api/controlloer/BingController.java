@@ -5,11 +5,9 @@ import com.shimu.wallpaper.api.services.BingService;
 import com.shimu.wallpaper.api.services.server.BingScheduledService;
 import com.shimu.wallpaper.api.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -44,11 +42,17 @@ public class BingController {
      */
     @GetMapping("/random")
     public void getRandomImage(HttpServletResponse response,
-                               @RequestParam(required = false) String i18nKey) {
+                               @RequestHeader(value = "User-Agent", required = false) String userAgent,
+                               @RequestParam(required = false) String i18nKey,
+                               @RequestParam(required = false, defaultValue = "1920") Integer width,
+                               @RequestParam(required = false, defaultValue = "1080") Integer height) {
+        if (StringUtils.isEmpty(userAgent)) {
+            throw new WallpaperApiException("请求头缺少 User-Agent 参数", 10001);
+        }
         if (!bingScheduledService.isInitialized()) {
             throw new WallpaperApiException("未完成初始化，请稍后~~~", 10000);
         }
-        bingService.getRandomImage(response, i18nKey);
+        bingService.getRandomImage(response, userAgent, i18nKey, width, height);
     }
 
     @GetMapping("fresh_data")

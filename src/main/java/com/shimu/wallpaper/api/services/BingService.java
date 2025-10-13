@@ -7,5 +7,5 @@ public interface BingService {
 
     void getTodayWallpaper(HttpServletResponse response);
 
-    void getRandomImage(HttpServletResponse response, String i18nKey);
+    void getRandomImage(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height);
 }

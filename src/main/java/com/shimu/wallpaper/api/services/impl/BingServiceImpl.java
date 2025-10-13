@@ -1,5 +1,6 @@
 package com.shimu.wallpaper.api.services.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
@@ -8,6 +9,7 @@ import com.shimu.wallpaper.api.enums.BingJsonI18nEnum;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.model.po.BingWallpaperPO;
 import com.shimu.wallpaper.api.model.response.BingResponse;
+import com.shimu.wallpaper.api.model.vo.BingWallpaperVO;
 import com.shimu.wallpaper.api.repository.BingWallpaperRepository;
 import com.shimu.wallpaper.api.services.BingService;
 import com.shimu.wallpaper.api.services.server.BingScheduledService;
@@ -21,6 +23,8 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -64,7 +68,7 @@ public class BingServiceImpl implements BingService {
      * @param i18nKey
      */
     @Override
-    public void getRandomImage(HttpServletResponse response, String i18nKey) {
+    public void getRandomImage(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height) {
         List<BingWallpaperPO> list = null;
         BingJsonI18nEnum i18nEnum = null;
         if (StringUtils.isNotEmpty(i18nKey)) {
@@ -78,9 +82,26 @@ public class BingServiceImpl implements BingService {
         if (list.isEmpty()) {
             throw new WallpaperApiException("暂无数据，请稍后再试", 50001);
         }
+        String resolution = String.format("%dx%d", 1920, 1080);
+        if (StringUtils.containsIgnoreCase(userAgent, "mobile") ||
+                StringUtils.containsIgnoreCase(userAgent, "android") ||
+                StringUtils.containsIgnoreCase(userAgent, "iphone")) {
+            width = width == 1920 ? 1080 : width;
+            height = height == 1080 ? 1920 : height;
+            resolution = String.format("%dx%d", 1080, 1920);
+        }
+        if (StringUtils.containsIgnoreCase(userAgent, "ipad")) {
+            height = height == 1080 ? 1200 : height;
+            resolution = String.format("%dx%d", 1920, 1200);
+        }
+        log.info("userAgent: {}", userAgent);
         int randomInt = RandomUtil.randomInt(0, list.size());
         BingWallpaperPO bingWallpaperPO = list.get(randomInt);
-        log.info("请求数据：{}", JSON.toJSONString(bingWallpaperPO));
-        StreamResponseUtils.streamImage(response, bingWallpaperPO.getUrl());
+        BingWallpaperVO bingWallpaperVO = BeanUtil.copyProperties(bingWallpaperPO, BingWallpaperVO.class, "url");
+        String url = StringUtils.replace(bingWallpaperPO.getUrl(), "1920x1080", resolution);
+        String appendUrl = url + "&w=" + width + "&h=" + height;
+        bingWallpaperVO.setUrlList(Collections.singletonList(appendUrl));
+        log.info("查询结果：{}", JSON.toJSONString(bingWallpaperVO));
+        StreamResponseUtils.streamImage(response, appendUrl);
     }
 }
