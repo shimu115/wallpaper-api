@@ -30,8 +30,15 @@ public class BingController {
      * @throws IOException
      */
     @GetMapping("/today")
-    public void getTodayWallpaper(HttpServletResponse response) {
-        bingService.getTodayWallpaper(response);
+    public void getTodayWallpaper(HttpServletResponse response,
+                                  @RequestHeader(value = "User-Agent") String userAgent,
+                                  @RequestParam(required = false, defaultValue = "zh_CN") String i18nKey,
+                                  @RequestParam(required = false, defaultValue = "1920") Integer width,
+                                  @RequestParam(required = false, defaultValue = "1080") Integer height) {
+        if (StringUtils.isEmpty(userAgent)) {
+            throw new WallpaperApiException("请求头缺少 User-Agent 参数", 10001);
+        }
+        bingService.getTodayWallpaper(response, userAgent, i18nKey, width, height);
     }
 
     /**

@@ -53,6 +53,6 @@ public class AcgServiceImpl implements AcgService {
         }
         String url = result.toString().trim();
         log.info("图片地址: {}", url);
-        StreamResponseUtils.streamImage(response, url);
+        StreamResponseUtils.streamImage(response, url, userAgent, "zh-CN", 1920, 1080);
     }
 }

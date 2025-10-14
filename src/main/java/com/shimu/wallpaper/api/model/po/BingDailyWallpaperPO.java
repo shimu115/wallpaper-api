@@ -1,12 +1,18 @@
-package com.shimu.wallpaper.api.model.vo;
+package com.shimu.wallpaper.api.model.po;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
+import javax.persistence.*;
 
 @Data
-public class BIngImageVO {
+@Table(name = "bing_daily_wallpaper")
+@Entity
+public class BingDailyWallpaperPO {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
     private String startDate;
     private String fullStartDate;
     private String endDate;
@@ -21,5 +27,4 @@ public class BIngImageVO {
     private int drk;
     private int top;
     private int bot;
-    private List<String> hs;
 }

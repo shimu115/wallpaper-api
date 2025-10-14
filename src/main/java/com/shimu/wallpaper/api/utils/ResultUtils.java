@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
  * <p> 项目统一返回格式 </p>
  * @author shimu
  * @version 1.0
- * @description TODO
  * @date 2024-03-28 21:14
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
