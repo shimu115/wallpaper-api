@@ -1,17 +1,12 @@
 package com.shimu.wallpaper.api.services.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.EnumUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
-import com.shimu.wallpaper.api.enums.ApiContains;
 import com.shimu.wallpaper.api.enums.BingJsonI18nEnum;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.model.Resolution;
 import com.shimu.wallpaper.api.model.po.BingWallpaperPO;
-import com.shimu.wallpaper.api.model.response.BingResponse;
 import com.shimu.wallpaper.api.model.vo.BingWallpaperVO;
 import com.shimu.wallpaper.api.repository.BingWallpaperRepository;
 import com.shimu.wallpaper.api.services.BingService;
@@ -23,13 +18,9 @@ import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * bing 壁纸业务代码
@@ -86,5 +77,10 @@ public class BingServiceImpl implements BingService {
         bingWallpaperVO.setUrlList(Collections.singletonList(appendUrl));
         log.info("查询结果：{}", JSON.toJSONString(bingWallpaperVO));
         StreamResponseUtils.streamImage(response, appendUrl, userAgent, i18nEnum.name(), width, height);
+    }
+
+    @Override
+    public Map<String, Object> getI18n() {
+        return com.shimu.wallpaper.api.utils.EnumUtils.enumToMap(BingJsonI18nEnum.class);
     }
 }

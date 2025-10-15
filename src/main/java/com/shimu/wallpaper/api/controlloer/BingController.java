@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("bing/wallpaper")
@@ -67,4 +68,11 @@ public class BingController {
         bingScheduledService.refreshAllLanguages();
         return ResultUtils.success();
     }
+
+    @GetMapping("getI18n")
+    public ResultUtils<Map<String, Object>> getI18n() {
+        Map<String, Object> result = bingService.getI18n();
+        return ResultUtils.success(result);
+    }
+
 }
