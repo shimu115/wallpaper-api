@@ -1,6 +1,7 @@
 package com.shimu.wallpaper.api.utils;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import lombok.*;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class PageUtils<T> {
 
         // 边界处理
         if (p.page > p.pageCount && p.pageCount > 0) {
-            p.page = p.pageCount;
+            throw new WallpaperApiException("page 超出总页数（pageCount） " + p.pageCount + "，请重新输入页数", 10002);
         }
 
         // 计算前后页
@@ -64,6 +65,11 @@ public class PageUtils<T> {
 
         p.prevPage = p.hasPrev ? p.page - 1 : null;
         p.nextPage = p.hasNext ? p.page + 1 : null;
+
+        // 计算当前页的数据
+        int fromIndex = (p.page - 1) * p.pageSize;
+        int toIndex = Math.min(fromIndex + p.pageSize, records.size());
+        p.records = records.subList(fromIndex, toIndex);
 
         return p;
     }

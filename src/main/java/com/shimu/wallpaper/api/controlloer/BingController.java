@@ -1,8 +1,10 @@
 package com.shimu.wallpaper.api.controlloer;
 
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
+import com.shimu.wallpaper.api.model.vo.BingWallpaperVO;
 import com.shimu.wallpaper.api.services.BingService;
 import com.shimu.wallpaper.api.services.server.BingScheduledService;
+import com.shimu.wallpaper.api.utils.PageUtils;
 import com.shimu.wallpaper.api.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -72,6 +75,15 @@ public class BingController {
     @GetMapping("getI18n")
     public ResultUtils<Map<String, Object>> getI18n() {
         Map<String, Object> result = bingService.getI18n();
+        return ResultUtils.success(result);
+    }
+
+
+    @GetMapping("find")
+    public ResultUtils<PageUtils<BingWallpaperVO>> find(@RequestParam(required = false) String i18nKey,
+                                                        @RequestParam(required = false, defaultValue = "1") Integer page,
+                                                        @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+        PageUtils<BingWallpaperVO> result = bingService.find(i18nKey, page, pageSize);
         return ResultUtils.success(result);
     }
 

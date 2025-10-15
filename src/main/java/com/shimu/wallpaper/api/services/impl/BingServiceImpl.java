@@ -12,6 +12,7 @@ import com.shimu.wallpaper.api.repository.BingWallpaperRepository;
 import com.shimu.wallpaper.api.services.BingService;
 import com.shimu.wallpaper.api.services.server.BingScheduledService;
 import com.shimu.wallpaper.api.utils.AutoResolutionUtils;
+import com.shimu.wallpaper.api.utils.PageUtils;
 import com.shimu.wallpaper.api.utils.StreamResponseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
@@ -82,5 +83,23 @@ public class BingServiceImpl implements BingService {
     @Override
     public Map<String, Object> getI18n() {
         return com.shimu.wallpaper.api.utils.EnumUtils.enumToMap(BingJsonI18nEnum.class);
+    }
+
+    @Override
+    public PageUtils<BingWallpaperVO> find(String i18nKey, Integer page, Integer pageSize) {
+        List<BingWallpaperPO> find = null;
+        if (StringUtils.isEmpty(i18nKey)) {
+            find = repository.findAll();
+        } else {
+            BingJsonI18nEnum jsonI18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
+            find = repository.findByI18nKey(jsonI18nEnum.getKey());
+        }
+        List<BingWallpaperVO> bingWallpaperVOS = new ArrayList<>();
+        for (BingWallpaperPO bingWallpaperPO : find) {
+            BingWallpaperVO bingWallpaperVO = BeanUtil.copyProperties(bingWallpaperPO, BingWallpaperVO.class, "url");
+            bingWallpaperVO.setUrlList(Collections.singletonList(bingWallpaperPO.getUrl()));
+            bingWallpaperVOS.add(bingWallpaperVO);
+        }
+        return PageUtils.buildPage(page, pageSize, bingWallpaperVOS.size(), bingWallpaperVOS);
     }
 }
