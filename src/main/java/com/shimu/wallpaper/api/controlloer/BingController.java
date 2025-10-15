@@ -66,19 +66,33 @@ public class BingController {
         bingService.getRandomImage(response, userAgent, i18nKey, width, height);
     }
 
+    /**
+     * 手动刷新数据
+     * @return
+     */
     @GetMapping("fresh_data")
     public ResultUtils<Void> freshData() {
         bingScheduledService.refreshAllLanguages();
         return ResultUtils.success();
     }
 
+    /**
+     * 获取可使用的语言数据
+     * @return
+     */
     @GetMapping("getI18n")
     public ResultUtils<Map<String, Object>> getI18n() {
         Map<String, Object> result = bingService.getI18n();
         return ResultUtils.success(result);
     }
 
-
+    /**
+     * 分页查询数据
+     * @param i18nKey
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @GetMapping("find")
     public ResultUtils<PageUtils<BingWallpaperVO>> find(@RequestParam(required = false) String i18nKey,
                                                         @RequestParam(required = false, defaultValue = "1") Integer page,
