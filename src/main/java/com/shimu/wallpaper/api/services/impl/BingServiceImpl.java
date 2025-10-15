@@ -85,6 +85,6 @@ public class BingServiceImpl implements BingService {
         String appendUrl = AutoResolutionUtils.autoResolutionWallpaperUrl(userAgent, i18nEnum.name(), bingWallpaperPO.getUrl(), customizeResolution);
         bingWallpaperVO.setUrlList(Collections.singletonList(appendUrl));
         log.info("查询结果：{}", JSON.toJSONString(bingWallpaperVO));
-        StreamResponseUtils.streamImage(response, "https://bing.com/th?id=OHR.JohnDaySnow_EN-AU9302838803_1920x1200.jpg&w=1920&h=1200", userAgent, i18nEnum.name(), width, height);
+        StreamResponseUtils.streamImage(response, appendUrl, userAgent, i18nEnum.name(), width, height);
     }
 }
