@@ -1,5 +1,6 @@
 package com.shimu.wallpaper.api.model.po;
 
+import cn.hutool.core.date.DateTime;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class BingWallpaperPO {
     @Id
     @Column(length = 36, nullable = false, unique = true)
     private String id = UUID.randomUUID().toString();
+    private Integer dataId;
     private String title;
     private String url;
     private String i18nKey;

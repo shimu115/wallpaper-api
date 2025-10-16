@@ -131,6 +131,7 @@ public class BingScheduledService {
                 }
                 BingWallpaperPO entity = new BingWallpaperPO();
                 entity.setId(UUID.randomUUID().toString()); // 避免锁库用 UUID
+                entity.setDataId(item.getId());
                 entity.setUrl(item.getUrl());
                 entity.setCopyright(item.getCopyright());
                 entity.setCopyrightLink(item.getCopyrightLink());

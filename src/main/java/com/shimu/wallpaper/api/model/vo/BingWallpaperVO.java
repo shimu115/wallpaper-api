@@ -1,5 +1,7 @@
 package com.shimu.wallpaper.api.model.vo;
 
+import cn.hutool.core.date.DateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -17,12 +19,15 @@ import java.util.UUID;
 public class BingWallpaperVO {
 
     private String id;
+    private Integer dataId;
     private String title;
     private List<String> urlList;
     private String i18nKey;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date dateTime;
     private String copyright;
     private String copyrightLink;
     private String hsh;
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createdTime;
 }
