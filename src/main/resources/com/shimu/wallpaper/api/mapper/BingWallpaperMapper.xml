@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shimu.wallpaper.api.mapper.BingWallpaperMapper">
+
+    <sql id="base_bing_wallpaper">
+        SELECT
+            id,
+            data_id,
+            url,
+            copyright,
+            copyright_link,
+            hsh,
+            i18n_key,
+            date_time,
+            created_time,
+            title
+        FROM bing_wallpaper
+    </sql>
+
+    <resultMap id="bingWallpaperPO" type="com.shimu.wallpaper.api.model.po.BingWallpaperPO">
+        <id property="id" column="id"/>
+        <result property="dataId" column="data_id" javaType="integer"/>
+        <result property="url" column="url"/>
+        <result property="i18nKey" column="i18n_key" javaType="string"/>
+        <result property="copyright" column="copyright"/>
+        <result property="copyrightLink" column="copyright_link" javaType="string"/>
+        <result property="hsh" column="hsh"/>
+        <result property="title" column="title"/>
+        <result property="dateTime" column="date_time" javaType="date"/>
+        <result property="createdTime" column="created_time" javaType="date"/>
+    </resultMap>
+
+    <select id="findByI18nKey" resultMap="bingWallpaperPO">
+        <include refid="base_bing_wallpaper"></include>
+        <where>
+            <if test="i18nKey != null and i18nKey != ''">
+                and i18n_key = #{i18nKey}
+            </if>
+            and 1= 1
+        </where>
+    </select>
+
+    <select id="findBy" resultMap="bingWallpaperPO">
+        <include refid="base_bing_wallpaper"></include>
+        <where>
+            <if test="i18nKey != null and i18nKey != ''">
+                and i18n_key = #{i18nKey}
+            </if>
+            <if test="dataId != null and dataId != 0">
+                and data_id = #{dataId}
+            </if>
+            <if test="startTime != null">
+                AND CAST(date_time AS INTEGER) <![CDATA[ >= ]]> #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND CAST(date_time AS INTEGER) <![CDATA[ <= ]]> #{endTime}
+            </if>
+            and 1= 1
+        </where>
+    </select>
+
+</mapper>

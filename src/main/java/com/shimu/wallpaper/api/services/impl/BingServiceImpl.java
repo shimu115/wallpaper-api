@@ -1,10 +1,12 @@
 package com.shimu.wallpaper.api.services.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
 import com.shimu.wallpaper.api.enums.BingJsonI18nEnum;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
+import com.shimu.wallpaper.api.mapper.BingWallpaperMapper;
 import com.shimu.wallpaper.api.model.Resolution;
 import com.shimu.wallpaper.api.model.po.BingWallpaperPO;
 import com.shimu.wallpaper.api.model.vo.BingWallpaperVO;
@@ -21,6 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -35,6 +41,9 @@ public class BingServiceImpl implements BingService {
 
     @Autowired
     private BingWallpaperRepository repository;
+
+    @Autowired
+    private BingWallpaperMapper bingWallpaperMapper;
 
     /**
      * 获取今日壁纸
@@ -86,20 +95,49 @@ public class BingServiceImpl implements BingService {
     }
 
     @Override
-    public PageUtils<BingWallpaperVO> find(String i18nKey, Integer page, Integer pageSize) {
-        List<BingWallpaperPO> find = null;
-        if (StringUtils.isEmpty(i18nKey)) {
-            find = repository.findAll();
-        } else {
-            BingJsonI18nEnum jsonI18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
-            find = repository.findByI18nKey(jsonI18nEnum.getKey());
+    public PageUtils<BingWallpaperVO> findPage(String i18nKey, Integer sort, Integer page, Integer pageSize) {
+        BingJsonI18nEnum jsonI18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
+        List<BingWallpaperPO> find = bingWallpaperMapper.findByI18nKey(jsonI18nEnum == null ? null : jsonI18nEnum.getKey());
+        List<BingWallpaperVO> bingWallpaperVOS = bingWallpaperPOList2VOList(find, sort);
+        return PageUtils.buildPage(page, pageSize, bingWallpaperVOS.size(), bingWallpaperVOS);
+    }
+
+    @Override
+    public List<BingWallpaperVO> find(String i18nKey, Integer dataId, String startTime, String endTime, Integer sort) {
+        BingJsonI18nEnum jsonI18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
+        Long startMillis = null;
+        Long endMillis = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        if (StringUtils.isNotBlank(startTime)) {
+            startMillis = LocalDate.parse(startTime, formatter)
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli();
         }
-        List<BingWallpaperVO> bingWallpaperVOS = new ArrayList<>();
-        for (BingWallpaperPO bingWallpaperPO : find) {
+
+        if (StringUtils.isNotBlank(endTime)) {
+            endMillis = LocalDate.parse(endTime, formatter)
+                    .plusDays(1) // 包含当天
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli();
+        }
+        List<BingWallpaperPO> resultPO = bingWallpaperMapper.findBy(jsonI18nEnum == null ? null : jsonI18nEnum.getKey(), dataId, startMillis, endMillis);
+        return bingWallpaperPOList2VOList(resultPO, sort);
+    }
+
+    private List<BingWallpaperVO> bingWallpaperPOList2VOList(List<BingWallpaperPO> po, Integer sort) {
+        List<BingWallpaperVO> result = new ArrayList<>();
+        for (BingWallpaperPO bingWallpaperPO : po) {
             BingWallpaperVO bingWallpaperVO = BeanUtil.copyProperties(bingWallpaperPO, BingWallpaperVO.class, "url");
             bingWallpaperVO.setUrlList(Collections.singletonList(bingWallpaperPO.getUrl()));
-            bingWallpaperVOS.add(bingWallpaperVO);
+            result.add(bingWallpaperVO);
         }
-        return PageUtils.buildPage(page, pageSize, bingWallpaperVOS.size(), bingWallpaperVOS);
+        if (sort == 0) {
+            // 降序排序
+            return CollectionUtil.sort(result, Comparator.comparing(BingWallpaperVO::getDateTime).reversed());
+        }
+        // 升序排序
+        return CollectionUtil.sort(result, Comparator.comparing(BingWallpaperVO::getDateTime));
     }
 }

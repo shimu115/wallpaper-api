@@ -24,6 +24,13 @@ spring:
       shutdown:
         await-termination: true
         await-termination-period: 30s
+
+mybatis:
+  mapper-locations: classpath:com/shimu/wallpaper/api/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 task:
   wallpaper:
     cron: "0 0 */1 * * ?"

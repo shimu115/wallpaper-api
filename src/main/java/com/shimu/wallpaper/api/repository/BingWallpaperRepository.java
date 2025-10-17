@@ -10,7 +10,5 @@ import java.util.List;
  */
 public interface BingWallpaperRepository extends JpaRepository<BingWallpaperPO, Long> {
 
-    void deleteByI18nKey(String i18nKey);
-
     List<BingWallpaperPO> findByI18nKey(String i18nKey);
 }
