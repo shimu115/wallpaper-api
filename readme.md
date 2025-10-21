@@ -17,20 +17,102 @@
 
 **数据来源：** `https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN`
 
-无需传参
+> 请求头
+
+| header | description                               | default required |
+| ------ |-------------------------------------------| ---------- |
+| User-Agent | 使用设备自带的请求头，不可手动去除此请求头，接口需要使用此请求头自动调整图片分辨率 | true |
+
+> **暂未判断纯血鸿蒙设备的请求头，因为身边无人使用纯血鸿蒙设备，所以不知道默认ua是什么**
+> 为判断的设备均以默认的 1920x1080 分辨率处理
+
+> 参数说明
+
+| param   | description  | default required |
+|---------|--------------|------------------|
+| i18nKey | 语言（默认 zh_CN） | false |
+| width   | 宽度（默认1920）   | false |
+| height  | 高度（默认1080）   | false |
 
 ##### 随机壁纸
 ~~~
 /bing/wallpaper/random
 ~~~
 
+> 请求头
+
+| header | description                               | default required |
+| ------ |-------------------------------------------| ---------- |
+| User-Agent | 使用设备自带的请求头，不可手动去除此请求头，接口需要使用此请求头自动调整图片分辨率 | true |
+
+> **暂未判断纯血鸿蒙设备的请求头，因为身边无人使用纯血鸿蒙设备，所以不知道默认ua是什么**
+> 为判断的设备均以默认的 1920x1080 分辨率处理
+
 > 参数说明
 
-| param   | description                                |
-|---------|--------------------------------------------|
-| i18nKey | 默认使用所有国家图片进行随机,可使用参数见 BingJsonI18nKey 枚举说明 |
+| param   | description                               | default required |
+|---------|-------------------------------------------|------------------|
+| i18nKey | 默认使用所有国家图片进行随机,可使用参数见 BingJsonI18nKey 枚举说明 | false |
+| width   | 宽度（默认1920） | false |
+| height  | 高度（默认1080） | false |
 
-> `BingJsonI18nKey` 枚举说明
+##### 手动刷新数据
+~~~
+/bing/wallpaper/fresh_data
+~~~
+
+##### 获取可使用的语言数据
+~~~
+/bing/wallpaper/getI18n
+~~~
+
+##### 分页查询数据
+~~~
+/bing/wallpaper/findPage
+~~~
+
+> 参数说明
+
+| param  | description                                | default required |
+|--------|--------------------------------------------|------------------|
+|i18nKey | 默认使用所有国家图片进行随机,可使用参数见 BingJsonI18nKey 枚举说明 | false |
+| order  | 排序（默认降序）, 参数见 SortEnum 枚举说明，传 key          | false |
+| page  | 页数（默认1）                                    | false |
+| pageSize | 每页数量（默认10）                                         | false |
+
+##### 分页查询数据
+~~~
+/bing/wallpaper/find
+~~~
+
+> 参数说明
+
+| param  | description                                | default required |
+|--------|--------------------------------------------|------------------|
+|i18nKey | 默认使用所有国家图片进行随机,可使用参数见 BingJsonI18nKey 枚举说明 | false |
+| dataId  | 按照 dataId （源数据的 id）查询                      | false |
+| startTime  | 起始时间，范围查询                                  | false |
+| endTime | 结束时间，范围查询                                  | false |
+| order  | 排序（默认降序）, 参数见 SortEnum 枚举说明，传 key          | false |
+
+#### acg
+
+##### 随机acg图片
+
+~~~
+/acg/wallpaper/random
+~~~
+
+> [数据来源](https://www.loliapi.com/docs/acg?type=url)
+> [文档](https://www.loliapi.com/docs/acg/)
+
+无需传参
+
+> 原接口通过请求头 `ua` 来自适应判断是手机还是电脑，自动返回相应图片的 url，然后通过返回的 url 使用流返回相应的图片，
+> 这样可以直接使用固定的地址直接再前端的 css 样式的 background-image: url() 引用随机图片地址
+
+#### 枚举说明
+##### BingJsonI18nKey 枚举说明
 
 | 代码    | 语言            | 国家/地区               |
 | ----- | ------------- | ------------------- |
@@ -43,31 +125,18 @@
 | ja_JP | 日语 (Japanese) | 日本 (Japan)          |
 | zh_CN | 中文 (Chinese)  | 中国 (China)          |
 
-##### 手动刷新数据
-~~~
-/bing/wallpaper/fresh_data
-~~~
+##### SortEnum 枚举说明
+| key | value | description |
+| --- | ----- | ----------- |
+| ASC | 0     | 升序       |
+| DESC | 1     | 降序       |
 
-#### acg
-
-##### 随机acg图片
-
-~~~
-/acg/wallpaper/random
-~~~
-
-**数据来源：** `https://www.loliapi.com/docs/acg?type=url`
-
-无需传参
-
-> 原接口通过请求头 `ua` 来自适应判断是手机还是电脑，自动返回相应图片的 url，然后通过返回的 url 使用流返回相应的图片，
-> 这样可以直接使用固定的地址直接再前端的 css 样式的 background-image: url() 引用随机图片地址
 
 ## docker 构建与部署
 ### 构建 docker 镜像
 **使用命令** 
 ~~~ bash
-docker build -t wallpaper-api:1.0.0 .
+docker build -t wallpaper-api:latest .
 ~~~
 > 可以查看下项目中的 application.yml 文件，如果想更改配置，可以再 `ENTRYPOINT` 这一行加上对应的配置参数
 > 例：
@@ -83,13 +152,13 @@ docker run -d \
   -p 9123:9123 \
   --name wallpaper-api \
   --restart=unless-stopped \
-  wallpaper-api:1.0.0
+  wallpaper-api:latest
 ~~~
 > **docker compose 创建容器**
 ~~~yaml
 services:
   wallpaper-api:
-    image: wallpaper-api:1.0.0
+    image: wallpaper-api:latest
     container_name: wallpaper-api
     ports:
       - 9123:9123
