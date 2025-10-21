@@ -13,7 +13,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.sqlite.hibernate.dialect.SQLiteDialect
@@ -29,7 +29,7 @@ mybatis:
   mapper-locations: classpath:com/shimu/wallpaper/api/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 打印sql日志
 
 task:
   wallpaper:

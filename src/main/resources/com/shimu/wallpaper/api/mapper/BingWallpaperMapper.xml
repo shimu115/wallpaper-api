@@ -53,10 +53,10 @@
                 and data_id = #{dataId}
             </if>
             <if test="startTime != null">
-                AND CAST(date_time AS INTEGER) <![CDATA[ >= ]]> #{startTime}
+                and cast(date_time as integer) <![CDATA[ >= ]]> #{startTime}
             </if>
             <if test="endTime != null">
-                AND CAST(date_time AS INTEGER) <![CDATA[ <= ]]> #{endTime}
+                and cast(date_time as integer) <![CDATA[ <= ]]> #{endTime}
             </if>
             and 1= 1
         </where>

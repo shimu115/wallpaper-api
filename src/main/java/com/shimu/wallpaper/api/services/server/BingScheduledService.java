@@ -21,11 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
@@ -104,9 +99,9 @@ public class BingScheduledService {
 
         List<BingWallpaperPO> exiting = repository.findByI18nKey(lang.getKey());
 
-        Map<String, BingWallpaperPO> exitingMap = exiting.stream()
+        Map<Integer, BingWallpaperPO> exitingMap = exiting.stream()
                 .collect(Collectors.toMap(
-                        BingWallpaperPO::getHsh,
+                        BingWallpaperPO::getDataId,
                         e -> e,
                         (existing, replacement) -> existing  // 保留第一个
                 ));
@@ -124,7 +119,7 @@ public class BingScheduledService {
         // 转换成实体
         List<BingWallpaperPO> entities = new ArrayList<>();
         for (GitHubJsonResponse item : data) {
-            if (!exitingMap.containsKey(item.getHsh())) {
+            if (!exitingMap.containsKey(item.getId())) {
                 // 排除以此域名访问的 url，此域名访问不通
                 if (StringUtils.startsWith(item.getUrl(), "https://cdn.bimg.cc")) {
                     continue;
@@ -153,28 +148,13 @@ public class BingScheduledService {
                 log.info("语言 {} 保存成功, 条数: {}", lang.getKey(), entities.size());
                 break;
             } catch (Exception e) {
-                if (e.getMessage() != null && e.getMessage().contains("database is locked") && retry > 0) {
+                if (e.getMessage() != null && e.getMessage().contains("database is locked")) {
                     log.warn("数据库被锁，重试中... 剩余次数: {}", retry);
                     Thread.sleep(500); // 等待再试
                 } else {
                     throw e;
                 }
             }
-        }
-    }
-
-    /**
-     * 从 GitHub 拉取数据（Java 8 兼容写法）
-     */
-    private String fetchFromGitHub(String url) throws IOException {
-        try (InputStream in = new URL(url).openStream();
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[8192];
-            int len;
-            while ((len = in.read(buffer)) != -1) {
-                out.write(buffer, 0, len);
-            }
-            return new String(out.toByteArray(), StandardCharsets.UTF_8);
         }
     }
 
