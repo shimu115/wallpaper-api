@@ -80,7 +80,7 @@
 | page  | 页数（默认1）                                    | false |
 | pageSize | 每页数量（默认10）                                         | false |
 
-##### 分页查询数据
+##### 查询数据
 ~~~
 /bing/wallpaper/find
 ~~~
