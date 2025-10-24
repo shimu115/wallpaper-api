@@ -1,3 +1,19 @@
+# wallpaper-api
+
+<p align="center">
+  <a href="https://github.com/shimu115/wallpaper-api/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/shimu115/wallpaper-api/maven.yml?branch=main&label=build&logo=github&color=brightgreen" alt="Build Status">
+  </a>
+  <img src="https://img.shields.io/badge/Java-8-orange?logo=openjdk" alt="Java Version">
+  <img src="https://img.shields.io/badge/Spring%20Boot-2.6-brightgreen?logo=springboot" alt="Spring Boot Version">
+  <img src="https://img.shields.io/badge/build-Maven-blue?logo=apachemaven" alt="Build Tool">
+  <a href="https://github.com/shimu115/wallpaper-api/releases">
+    <img src="https://img.shields.io/github/v/release/shimu115/wallpaper-api?label=release&logo=github" alt="Latest Release">
+  </a>
+  <img src="https://img.shields.io/github/license/shimu115/wallpaper-api?color=green&logo=open-source-initiative" alt="License">
+</p>
+
+
 ## 获取壁纸 api
 > 随机壁纸的数据来源于 [flow2000/bing-wallpaper-api](https://github.com/flow2000/bing-wallpaper-api/tree/master/data)
 >
