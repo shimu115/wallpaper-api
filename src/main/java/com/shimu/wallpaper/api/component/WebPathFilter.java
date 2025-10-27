@@ -1,5 +1,6 @@
 package com.shimu.wallpaper.api.component;
 
+import cn.hutool.core.collection.ListUtil;
 import com.shimu.wallpaper.api.utils.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +10,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author shimu
@@ -24,12 +26,20 @@ public class WebPathFilter implements Filter {
             throws IOException, ServletException {
         long startTime = System.currentTimeMillis();
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        log.info("<==================== 请求ip: {} ====================>", IpUtils.getClientIp(request));
+        String uri = request.getRequestURI();
+        List<String> list = ListUtil.of("favicon.ico", "swagger-resources", "api-docs", "doc.html", "webjars");
+        if (!isExclude(uri, list)) {
+            log.info("<==================== 请求ip: {} ====================>", IpUtils.getClientIp(request));
+        }
         filterChain.doFilter(request, servletResponse);
         long endTime = System.currentTimeMillis();
-        String uri = request.getRequestURI();
-        if (!StringUtils.contains(uri, "webjars") || StringUtils.contains(uri, "swagger") || StringUtils.contains(uri, "doc.html") || StringUtils.contains(uri, "v2/api")) {
+        if (!isExclude(uri, list)) {
             log.info("请求接口：{} =======> 请求耗时：{}ms", request.getRequestURI(), endTime - startTime);
         }
+    }
+
+    // 排除 knife4j 访问日志
+    private Boolean isExclude(String uri, List<String> excludes) {
+        return excludes.stream().anyMatch(exclude -> StringUtils.contains(uri, exclude));
     }
 }

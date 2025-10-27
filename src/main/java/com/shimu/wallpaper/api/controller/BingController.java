@@ -1,6 +1,5 @@
-package com.shimu.wallpaper.api.controlloer;
+package com.shimu.wallpaper.api.controller;
 
-import cn.hutool.core.date.DateUtil;
 import com.shimu.wallpaper.api.enums.SortEnum;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.model.vo.BingWallpaperVO;
@@ -8,17 +7,17 @@ import com.shimu.wallpaper.api.services.BingService;
 import com.shimu.wallpaper.api.services.server.BingScheduledService;
 import com.shimu.wallpaper.api.utils.PageUtils;
 import com.shimu.wallpaper.api.utils.ResultUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,6 +25,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("bing/wallpaper")
 @Slf4j
+@Tag(name = "必应壁纸接口", description = "提供每日壁纸、随机壁纸等接口")
 public class BingController {
 
     @Autowired
@@ -40,6 +40,7 @@ public class BingController {
      * @param response (无需传参)
      * @throws IOException
      */
+    @Operation(summary = "必应每日壁纸接口")
     @GetMapping("/today")
     public void getTodayWallpaper(HttpServletResponse response,
                                   @RequestHeader(value = "User-Agent") String userAgent,
@@ -58,6 +59,7 @@ public class BingController {
      * @param response
      * @param i18nKey
      */
+    @Operation(summary = "必应随机壁纸接口")
     @GetMapping("/random")
     public void getRandomImage(HttpServletResponse response,
                                @RequestHeader(value = "User-Agent") String userAgent,
@@ -77,6 +79,7 @@ public class BingController {
      * 手动刷新数据
      * @return
      */
+    @Operation(summary = "手动刷新数据")
     @GetMapping("fresh_data")
     public ResultUtils<Void> freshData() {
         bingScheduledService.refreshAllLanguages();
@@ -87,6 +90,7 @@ public class BingController {
      * 获取可使用的语言数据
      * @return
      */
+    @Operation(summary = "获取可使用的语言数据")
     @GetMapping("getI18n")
     public ResultUtils<Map<String, Object>> getI18n() {
         Map<String, Object> result = bingService.getI18n();
@@ -100,6 +104,7 @@ public class BingController {
      * @param pageSize
      * @return
      */
+    @Operation(summary = "分页查询数据")
     @GetMapping("findPage")
     public ResultUtils<PageUtils<BingWallpaperVO>> findPage(@RequestParam(required = false) String i18nKey,
                                                             @RequestParam(required = false, defaultValue = "desc") String order,
@@ -114,6 +119,16 @@ public class BingController {
         return ResultUtils.success(result);
     }
 
+    /**
+     * 查询数据
+     * @param i18nKey
+     * @param dataId
+     * @param startTime
+     * @param endTime
+     * @param order
+     * @return
+     */
+    @Operation(summary = "查询数据")
     @GetMapping("find")
     public ResultUtils<List<BingWallpaperVO>> find(@RequestParam(required = false) String i18nKey,
                                                    @RequestParam(required = false) Integer dataId,

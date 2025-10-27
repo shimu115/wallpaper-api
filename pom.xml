@@ -85,8 +85,13 @@
         </dependency>
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>2.0.9</version>
+            <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.7.0</version>
         </dependency>
     </dependencies>
     <repositories>
@@ -161,7 +166,21 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version><!--使用最新版或适合你项目的版本-->
+                <configuration>
+                    <encoding>UTF-8</encoding><!--设置资源文件编码-->
+                </configuration>
+            </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory><!--资源文件所在目录-->
+                <filtering>true</filtering><!--开启过滤-->
+            </resource>
+        </resources>
     </build>
     <!-- Apache License 2.0 开源协议 -->
     <licenses>

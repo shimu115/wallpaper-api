@@ -4,6 +4,9 @@ server:
     context-path: /api
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   banner:
     charset: UTF-8
     location: classpath:banner.txt
@@ -30,6 +33,21 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
     # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 打印sql日志
+
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+  group-configs:
+    - group: default
+      paths-to-match: /api/**
 
 task:
   wallpaper:
