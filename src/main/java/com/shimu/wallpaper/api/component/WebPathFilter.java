@@ -28,17 +28,17 @@ public class WebPathFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String uri = request.getRequestURI();
         List<String> list = ListUtil.of("favicon.ico", "swagger-resources", "api-docs", "doc.html", "webjars");
-        if (!isExclude(uri, list)) {
-            log.info("<==================== 请求ip: {} ====================>", IpUtils.getClientIp(request));
-        }
+        excludeLog(uri, list, "<==================== 请求ip: {} ====================>", IpUtils.getClientIp(request));
         filterChain.doFilter(request, servletResponse);
         long endTime = System.currentTimeMillis();
-        if (!isExclude(uri, list)) {
-            log.info("请求接口：{} =======> 请求耗时：{}ms", request.getRequestURI(), endTime - startTime);
-        }
+        excludeLog(uri, list, "请求接口：{} =======> 请求耗时：{}ms", request.getRequestURI(), endTime - startTime);
     }
 
     // 排除 knife4j 访问日志
+    private void excludeLog(String uri, List<String> excludes, String msg, Object... args) {
+        if (!isExclude(uri, excludes)) log.info(msg, args);
+    }
+
     private Boolean isExclude(String uri, List<String> excludes) {
         return excludes.stream().anyMatch(exclude -> StringUtils.contains(uri, exclude));
     }

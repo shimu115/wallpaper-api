@@ -38,16 +38,12 @@ public class MirrorComponent {
         }
 
         List<String> githubMirror = instance.getGithub();
-        log.info("githubMirror:{}", JSON.toJSONString(githubMirror));
         for (String mirror : githubMirror) {
             boolean reachable = HttpUtils.isReachable(mirror);
             if (reachable) {
-                String url = StringUtils.endsWith(mirror, "/") ? StringUtils.removeEnd(mirror, "/") : mirror;
-                log.info("[MirrorComponent] {} is reachable", url);
-                return url;
+                return StringUtils.endsWith(mirror, "/") ? StringUtils.removeEnd(mirror, "/") : mirror;
             }
         }
-        log.info("[MirrorComponent] https://raw.githubusercontent.com is reachable");
         return "https://raw.githubusercontent.com";
     }
 }
