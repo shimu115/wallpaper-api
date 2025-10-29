@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON;
 import com.shimu.wallpaper.api.enums.BingJsonI18nEnum;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.mapper.BingWallpaperMapper;
+import com.shimu.wallpaper.api.model.Page;
 import com.shimu.wallpaper.api.model.Resolution;
 import com.shimu.wallpaper.api.model.po.BingWallpaperPO;
 import com.shimu.wallpaper.api.model.vo.BingWallpaperVO;
@@ -95,7 +96,7 @@ public class BingServiceImpl implements BingService {
     }
 
     @Override
-    public PageUtils<BingWallpaperVO> findPage(String i18nKey, Integer sort, Integer page, Integer pageSize) {
+    public Page<BingWallpaperVO> findPage(String i18nKey, Integer sort, Integer page, Integer pageSize) {
         BingJsonI18nEnum jsonI18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
         List<BingWallpaperPO> find = bingWallpaperMapper.findByI18nKey(jsonI18nEnum == null ? null : jsonI18nEnum.getKey());
         List<BingWallpaperVO> bingWallpaperVOS = bingWallpaperPOList2VOList(find, sort);

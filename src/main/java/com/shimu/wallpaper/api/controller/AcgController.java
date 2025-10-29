@@ -1,6 +1,7 @@
 package com.shimu.wallpaper.api.controller;
 
 import com.shimu.wallpaper.api.services.AcgService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ public class AcgController {
     private AcgService acgService;
 
     @GetMapping("/random")
+    @Operation(summary = "随机图片")
     public void random(HttpServletResponse response, HttpServletRequest request) {
         acgService.random(response, request);
     }

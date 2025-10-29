@@ -2,6 +2,7 @@ package com.shimu.wallpaper.api.controller;
 
 import com.shimu.wallpaper.api.enums.SortEnum;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
+import com.shimu.wallpaper.api.model.Page;
 import com.shimu.wallpaper.api.model.vo.BingWallpaperVO;
 import com.shimu.wallpaper.api.services.BingService;
 import com.shimu.wallpaper.api.services.server.BingScheduledService;
@@ -40,7 +41,7 @@ public class BingController {
      * @param response (无需传参)
      * @throws IOException
      */
-    @Operation(summary = "必应每日壁纸接口")
+    @Operation(summary = "每日壁纸接口")
     @GetMapping("/today")
     public void getTodayWallpaper(HttpServletResponse response,
                                   @RequestHeader(value = "User-Agent") String userAgent,
@@ -59,7 +60,7 @@ public class BingController {
      * @param response
      * @param i18nKey
      */
-    @Operation(summary = "必应随机壁纸接口")
+    @Operation(summary = "随机壁纸接口")
     @GetMapping("/random")
     public void getRandomImage(HttpServletResponse response,
                                @RequestHeader(value = "User-Agent") String userAgent,
@@ -106,16 +107,16 @@ public class BingController {
      */
     @Operation(summary = "分页查询数据")
     @GetMapping("findPage")
-    public ResultUtils<PageUtils<BingWallpaperVO>> findPage(@RequestParam(required = false) String i18nKey,
-                                                            @RequestParam(required = false, defaultValue = "desc") String order,
-                                                            @RequestParam(required = false, defaultValue = "1") Integer page,
-                                                            @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+    public ResultUtils<Page<BingWallpaperVO>> findPage(@RequestParam(required = false) String i18nKey,
+                                                       @RequestParam(required = false, defaultValue = "desc") String order,
+                                                       @RequestParam(required = false, defaultValue = "1") Integer page,
+                                                       @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         Integer sort = EnumUtils.getEnum(SortEnum.class, order.toUpperCase(Locale.ROOT)) == null ?
                 null : EnumUtils.getEnum(SortEnum.class, order.toUpperCase(Locale.ROOT)).getValue();
         if (sort == null) {
             throw new WallpaperApiException("排序参数错误", 10002);
         }
-        PageUtils<BingWallpaperVO> result = bingService.findPage(i18nKey, sort, page, pageSize);
+        Page<BingWallpaperVO> result = bingService.findPage(i18nKey, sort, page, pageSize);
         return ResultUtils.success(result);
     }
 
