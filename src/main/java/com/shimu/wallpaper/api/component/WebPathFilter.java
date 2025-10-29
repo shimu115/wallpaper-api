@@ -27,7 +27,7 @@ public class WebPathFilter implements Filter {
         long startTime = System.currentTimeMillis();
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String uri = request.getRequestURI();
-        List<String> list = ListUtil.of("favicon.ico", "swagger-resources", "api-docs", "doc.html", "webjars");
+        List<String> list = ListUtil.of("favicon.ico", "swagger-resources", "api-docs", "doc.html", "webjars", "swagger-ui");
         excludeLog(uri, list, "<==================== 请求ip: {} ====================>", IpUtils.getClientIp(request));
         filterChain.doFilter(request, servletResponse);
         long endTime = System.currentTimeMillis();
