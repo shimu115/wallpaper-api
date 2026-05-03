@@ -1,5 +1,6 @@
-# wallpaper-api
+<h1 align="center">wallpaper-api</h1>
 
+---
 <p align="center">
   <a href="https://github.com/shimu115/wallpaper-api/actions">
     <img src="https://img.shields.io/github/actions/workflow/status/shimu115/wallpaper-api/maven.yml?branch=main&label=build&logo=github&color=brightgreen" alt="Build Status">
