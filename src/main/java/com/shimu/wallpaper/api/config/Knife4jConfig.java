@@ -1,5 +1,6 @@
 package com.shimu.wallpaper.api.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -17,21 +18,36 @@ import javax.annotation.Resource;
 public class Knife4jConfig {
 
     @Bean
+    public OpenAPI globalOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Wallpaper API 文档")
+                        .description("提供壁纸相关接口")
+                        .version(VersionProperties.getVersion()) // 在这里设置版本
+                        .contact(new Contact()
+                                .name("shimu")
+                                .email("shimuspace@email.com")
+                                .url("https://github.com/shimu115/wallpaper-api"))
+                        .license(license())
+                );
+    }
+
+    @Bean
     public GroupedOpenApi wallpaperApi() {
         log.info("wallpaper api version is {}", VersionProperties.getVersion());
         return GroupedOpenApi.builder()
                 .group("Wallpaper API")
                 .pathsToMatch("/api/**")
                 .packagesToScan("com.shimu.wallpaper.api.controller")
-                .addOpenApiCustomiser(openApi -> openApi.info(new Info()
-                        .license(license())
-                        .title("Wallpaper API 文档")
-                        .description("提供壁纸相关接口")
-                        .version(VersionProperties.getVersion())
-                        .contact(new Contact()
-                                .name("shimu")
-                                .email("shimuspace@email.com")
-                                .url("https://github.com/shimu115/wallpaper-api"))))
+//                .addOpenApiCustomiser(openApi -> openApi.info(new Info()
+//                        .license(license())
+//                        .title("Wallpaper API 文档")
+//                        .description("提供壁纸相关接口")
+//                        .version(VersionProperties.getVersion())
+//                        .contact(new Contact()
+//                                .name("shimu")
+//                                .email("shimuspace@email.com")
+//                                .url("https://github.com/shimu115/wallpaper-api"))))
                 .build();
     }
 

@@ -19,6 +19,11 @@
 >
 > 端口：9123
 
+### swagger 地址
+~~~http request
+http://localhost:9123/swagger-ui.html
+~~~
+
 ### api
 
 > 整体api前都需要加上 `/api`
