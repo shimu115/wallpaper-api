@@ -3,7 +3,14 @@
     {
       "name": "mirror.github",
       "type": "java.lang.String",
+      "defaultValue": "https://hub.gitmirror.com/raw.githubusercontent.com",
       "description": "GitHub mirror array."
+    },
+    {
+      "name": "mirror.retryCount",
+      "type": "java.lang.Integer",
+      "defaultValue": 3,
+      "description": "Mirror url retry count."
     },
     {
       "name": "task.wallpaper.cron",
