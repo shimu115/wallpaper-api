@@ -40,6 +40,11 @@ public class MirrorComponent {
         }
 
         List<String> githubMirror = instance.getGithub();
+        if (githubMirror == null || githubMirror.isEmpty()) {
+            log.warn("mirror.github 配置为空，使用默认地址");
+            return string;
+        }
+
         for (String mirror : githubMirror) {
             boolean reachable = HttpUtils.isReachable(mirror);
             if (reachable) {
