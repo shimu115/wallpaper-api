@@ -49,5 +49,5 @@ springdoc:
 
 task:
   wallpaper:
-    cron: "0 0 */1 * * ?"
+    cron: "0 0 4 * * ?"
     enable: true
