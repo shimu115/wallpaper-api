@@ -72,7 +72,7 @@ public class BingScheduledService {
     /**
      * 定时任务：每隔 1 小时刷新一次数据
      */
-    @Scheduled(cron = "${task.wallpaper.cron:0 0 * * * ?}") // 每小时执行一次
+    @Scheduled(cron = "${task.wallpaper.cron:0 0 4 * * ?}")
     @Transactional
     public void refreshAllLanguages() {
         if (!enable) {

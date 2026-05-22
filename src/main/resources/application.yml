@@ -46,8 +46,3 @@ springdoc:
     urls:
       - name: "Wallpaper API"
         url: /v3/api-docs
-
-task:
-  wallpaper:
-    cron: "0 0 4 * * ?"
-    enable: true
