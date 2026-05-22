@@ -93,21 +93,24 @@ public class BingScheduledService {
 
     private void refreshLanguage(BingJsonI18nEnum lang) throws InterruptedException {
         log.info("开始刷新语言: {}", lang.getKey());
-        // 获取所有 mirror URL 并依次尝试（mirror 缓存 URL + 默认地址兜底）
-        List<String> urls = mirrorResolver.getUrls();
-        String resp = null;
         int maxRetry = HttpUtils.getMaxRetry();
-        for (String url : urls) {
-            String finalUrl = StringUtils.replace(url, "{i18n_key}", lang.getKey());
-            log.info("尝试请求: {}", finalUrl);
-            resp = HttpUtils.httpGet(finalUrl, maxRetry);
-            if (resp != null) {
-                break;
+
+        // 先尝试用户配置的镜像
+        List<String> configuredUrls = mirrorResolver.getConfiguredUrls();
+        String resp = tryUrls(configuredUrls, lang, maxRetry, "尝试请求: {}");
+
+        // 用户配置均不可用，兜底使用默认镜像
+        if (resp == null) {
+            List<String> defaultUrls = mirrorResolver.defaultMirror();
+            if (!defaultUrls.isEmpty()) {
+//                log.warn("配置的镜像均不可用，尝试使用默认镜像兜底...");
+                resp = tryUrls(defaultUrls, lang, maxRetry, "尝试默认镜像: {}");
             }
         }
+
         if (resp == null) {
-            log.error("所有 mirror 均不可用，已重试 {} 次，语言: {}", maxRetry, lang.getKey());
-            throw new RuntimeException("所有 mirror 均不可用，请求失败");
+            log.error("所有镜像(含默认)均不可用，已重试 {} 次，语言: {}", maxRetry, lang.getKey());
+            throw new RuntimeException("所有镜像均不可用，请求失败");
         }
 
         GitHubJsonResult<List<GitHubJsonResponse>> gitHubJsonResult =
@@ -172,6 +175,18 @@ public class BingScheduledService {
                 }
             }
         }
+    }
+
+    private String tryUrls(List<String> urls, BingJsonI18nEnum lang, int maxRetry, String logFormat) {
+        for (String url : urls) {
+            String finalUrl = StringUtils.replace(url, "{i18n_key}", lang.getKey());
+            log.info(logFormat, finalUrl);
+            String resp = HttpUtils.httpGet(finalUrl, maxRetry);
+            if (resp != null) {
+                return resp;
+            }
+        }
+        return null;
     }
 
 }
