@@ -4,11 +4,14 @@ server:
     context-path: /api
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   banner:
     charset: UTF-8
     location: classpath:banner.txt
   datasource:
-    url: jdbc:sqlite:./bing-wallpaper.db
+    url: jdbc:sqlite:./data/bing-wallpaper.db
     driver-class-name: org.sqlite.JDBC
   jpa:
     hibernate:
@@ -31,11 +34,15 @@ mybatis:
     map-underscore-to-camel-case: true
     # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 打印sql日志
 
-task:
-  wallpaper:
-    cron: "0 0 */1 * * ?"
-    enable: true
-
-mirror:
-  github:
-    - https://hub.gitmirror.com/raw.githubusercontent.com
+knife4j:
+  enable: true
+  setting:
+    language: zh-CN
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: "Wallpaper API"
+        url: /v3/api-docs

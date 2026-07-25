@@ -1,4 +1,4 @@
-# wallpaper-api
+<h1 align="center">wallpaper-api</h1>
 
 <p align="center">
   <a href="https://github.com/shimu115/wallpaper-api/actions">
@@ -18,6 +18,11 @@
 > 随机壁纸的数据来源于 [flow2000/bing-wallpaper-api](https://github.com/flow2000/bing-wallpaper-api/tree/master/data)
 >
 > 端口：9123
+
+### swagger 地址
+~~~http request
+http://localhost:9123/swagger-ui.html
+~~~
 
 ### api
 

@@ -1,5 +1,6 @@
 package com.shimu.wallpaper.api.services;
 
+import com.shimu.wallpaper.api.model.Page;
 import com.shimu.wallpaper.api.model.vo.BingWallpaperVO;
 import com.shimu.wallpaper.api.utils.PageUtils;
 
@@ -16,7 +17,7 @@ public interface BingService {
 
     Map<String, Object> getI18n();
 
-    PageUtils<BingWallpaperVO> findPage(String i18nKey, Integer sort, Integer page, Integer pageSize);
+    Page<BingWallpaperVO> findPage(String i18nKey, Integer sort, Integer page, Integer pageSize);
 
     List<BingWallpaperVO> find(String i18nKey, Integer dataId, String startTime, String endTime, Integer sort);
 }

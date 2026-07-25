@@ -1,18 +1,16 @@
 package com.shimu.wallpaper.api.services.server;
 
-import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.shimu.wallpaper.api.enums.ApiContains;
+import com.shimu.wallpaper.api.component.MirrorResolver;
 import com.shimu.wallpaper.api.enums.BingJsonI18nEnum;
-import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.model.po.BingWallpaperPO;
 import com.shimu.wallpaper.api.model.response.GitHubJsonResponse;
 import com.shimu.wallpaper.api.model.response.GitHubJsonResult;
 import com.shimu.wallpaper.api.repository.BingWallpaperRepository;
+import com.shimu.wallpaper.api.utils.HttpUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +29,9 @@ public class BingScheduledService {
 
     @Autowired
     private BingWallpaperRepository repository;
+
+    @Autowired
+    private MirrorResolver mirrorResolver;
 
     @Autowired
     private Executor initExecutor;
@@ -71,7 +72,7 @@ public class BingScheduledService {
     /**
      * 定时任务：每隔 1 小时刷新一次数据
      */
-    @Scheduled(cron = "${task.wallpaper.cron:0 0 * * * ?}") // 每小时执行一次
+    @Scheduled(cron = "${task.wallpaper.cron:0 0 4 * * ?}")
     @Transactional
     public void refreshAllLanguages() {
         if (!enable) {
@@ -92,8 +93,26 @@ public class BingScheduledService {
 
     private void refreshLanguage(BingJsonI18nEnum lang) throws InterruptedException {
         log.info("开始刷新语言: {}", lang.getKey());
-        // 从 GitHub 拉取 JSON
-        String resp = HttpUtil.get(getBingJsonUrl(lang.name()));
+        int maxRetry = HttpUtils.getMaxRetry();
+
+        // 先尝试用户配置的镜像
+        List<String> configuredUrls = mirrorResolver.getConfiguredUrls();
+        String resp = tryUrls(configuredUrls, lang, maxRetry, "尝试请求: {}");
+
+        // 用户配置均不可用，兜底使用默认镜像
+        if (resp == null) {
+            List<String> defaultUrls = mirrorResolver.defaultMirror();
+            if (!defaultUrls.isEmpty()) {
+//                log.warn("配置的镜像均不可用，尝试使用默认镜像兜底...");
+                resp = tryUrls(defaultUrls, lang, maxRetry, "尝试默认镜像: {}");
+            }
+        }
+
+        if (resp == null) {
+            log.error("所有镜像(含默认)均不可用，已重试 {} 次，语言: {}", maxRetry, lang.getKey());
+            throw new RuntimeException("所有镜像均不可用，请求失败");
+        }
+
         GitHubJsonResult<List<GitHubJsonResponse>> gitHubJsonResult =
                 JSONObject.parseObject(resp, new TypeReference<GitHubJsonResult<List<GitHubJsonResponse>>>() {});
 
@@ -158,12 +177,16 @@ public class BingScheduledService {
         }
     }
 
-    private String getBingJsonUrl (String i18nKey) {
-        BingJsonI18nEnum enumResult = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
-        if (enumResult == null) {
-            throw new WallpaperApiException("无效参数");
+    private String tryUrls(List<String> urls, BingJsonI18nEnum lang, int maxRetry, String logFormat) {
+        for (String url : urls) {
+            String finalUrl = StringUtils.replace(url, "{i18n_key}", lang.getKey());
+            log.info(logFormat, finalUrl);
+            String resp = HttpUtils.httpGet(finalUrl, maxRetry);
+            if (resp != null) {
+                return resp;
+            }
         }
-        return StringUtils.replace(ApiContains.BING_GITHUB_JSON, "{i18n_key}", enumResult.getKey());
+        return null;
     }
 
 }

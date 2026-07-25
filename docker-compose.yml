@@ -1,0 +1,9 @@
+services:
+  wallpaper-api:
+    image: wallpaper-api:latest
+    container_name: wallpaper-api
+    ports:
+      - "9123:9123"
+    volumes:
+      - ./data:/workspace/data
+    restart: unless-stopped
