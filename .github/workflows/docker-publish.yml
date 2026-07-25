@@ -4,6 +4,9 @@ on:
   create:
     branches:
       - 'v*'
+  push:
+    branches:
+      - 'v*'
 
 jobs:
   build-and-push:
