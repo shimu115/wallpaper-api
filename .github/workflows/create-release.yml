@@ -1,0 +1,53 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Extract changelog section
+        id: changelog
+        run: |
+          # 去掉 tag 前缀 'v'，得到纯版本号（如 v1.1.0 → 1.1.0）
+          VERSION="${{ github.ref_name }}"
+          VERSION="${VERSION#v}"
+
+          echo "Resolved version: ${VERSION}"
+
+          # 从 CHANGELOG.md 中提取对应版本号的段落
+          # 从 "## [version]" 开始，到下一个 "## [" 或参考链接为止
+          CHANGELOG=$(awk -v ver="${VERSION}" '
+            /^## \[/ {
+              if (found) exit
+              if (index($0, "## [" ver "]") == 1) found = 1
+            }
+            /^\[.*\]: https:\/\// { if (found) exit }
+            found
+          ' CHANGELOG.md)
+
+          if [ -z "$CHANGELOG" ]; then
+            echo "::warning::No changelog entry found for version ${VERSION}"
+            CHANGELOG="No changelog entry found for this version."
+          fi
+
+          # 写入 GITHUB_OUTPUT（多行内容使用 heredoc 风格的 delimiter）
+          DELIM="EOF$(openssl rand -hex 8)"
+          echo "body<<${DELIM}" >> "$GITHUB_OUTPUT"
+          echo "$CHANGELOG" >> "$GITHUB_OUTPUT"
+          echo "${DELIM}" >> "$GITHUB_OUTPUT"
+
+      - name: Create Draft Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.body }}
+          draft: true
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
