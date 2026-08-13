@@ -35,9 +35,9 @@ data/
 
 ### VS Code ###
 .vscode/
-docs/docs/.vuepress/.temp/*
-docs/docs/.vuepress/.cache/*
-docs/docs/.vuepress/dist/*
+docs/.vuepress/.temp/*
+docs/.vuepress/.cache/*
+docs/.vuepress/dist/*
 node_modules/
 
 ### VS Code ###
