@@ -1,5 +1,6 @@
 package com.shimu.wallpaper.api.controller;
 
+import com.shimu.wallpaper.api.enums.AskMethod;
 import com.shimu.wallpaper.api.enums.SortEnum;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.model.Page;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -47,11 +49,15 @@ public class BingController {
                                   @RequestHeader(value = "User-Agent") String userAgent,
                                   @RequestParam(required = false, defaultValue = "zh_CN") String i18nKey,
                                   @RequestParam(required = false, defaultValue = "1920") Integer width,
-                                  @RequestParam(required = false, defaultValue = "1080") Integer height) {
+                                  @RequestParam(required = false, defaultValue = "1080") Integer height,
+                                  @RequestParam(required = false) AskMethod askMethod) {
+        if (ObjectUtils.isEmpty(askMethod)) {
+            askMethod = AskMethod.STREAM;
+        }
         if (StringUtils.isEmpty(userAgent)) {
             throw new WallpaperApiException("请求头缺少 User-Agent 参数", 10001);
         }
-        bingService.getTodayWallpaper(response, userAgent, i18nKey, width, height);
+        bingService.getTodayWallpaper(response, userAgent, i18nKey, width, height, askMethod);
     }
 
     /**
@@ -66,14 +72,18 @@ public class BingController {
                                @RequestHeader(value = "User-Agent") String userAgent,
                                @RequestParam(required = false) String i18nKey,
                                @RequestParam(required = false, defaultValue = "1920") Integer width,
-                               @RequestParam(required = false, defaultValue = "1080") Integer height) {
+                               @RequestParam(required = false, defaultValue = "1080") Integer height,
+                               @RequestParam(required = false) AskMethod askMethod) {
+        if (ObjectUtils.isEmpty(askMethod)) {
+            askMethod = AskMethod.STREAM;
+        }
         if (StringUtils.isEmpty(userAgent)) {
             throw new WallpaperApiException("请求头缺少 User-Agent 参数", 10001);
         }
         if (!bingScheduledService.isInitialized()) {
             throw new WallpaperApiException("未完成初始化，请稍后~~~", 10000);
         }
-        bingService.getRandomImage(response, userAgent, i18nKey, width, height);
+        bingService.getRandomImage(response, userAgent, i18nKey, width, height, askMethod);
     }
 
     /**
@@ -94,8 +104,7 @@ public class BingController {
     @Operation(summary = "获取可使用的语言数据")
     @GetMapping("getI18n")
     public ResultUtils<Map<String, Object>> getI18n() {
-        Map<String, Object> result = bingService.getI18n();
-        return ResultUtils.success(result);
+        return ResultUtils.success(bingService.getI18n());
     }
 
     /**

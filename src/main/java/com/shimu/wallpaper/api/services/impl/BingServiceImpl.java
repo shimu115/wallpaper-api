@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
+import com.shimu.wallpaper.api.enums.AskMethod;
 import com.shimu.wallpaper.api.enums.BingJsonI18nEnum;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.mapper.BingWallpaperMapper;
@@ -51,11 +52,18 @@ public class BingServiceImpl implements BingService {
      * @param response
      */
     @Override
-    public void getTodayWallpaper(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height) {
+    public void getTodayWallpaper(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod) {
         String todayWallpaperUrl = StreamResponseUtils.getTodayWallpaperUrl(i18nKey);
         Resolution customizeResolution = Resolution.builder().width(width).height(height).build();
         String wallpaperUrl = AutoResolutionUtils.autoResolutionWallpaperUrl(userAgent, i18nKey, todayWallpaperUrl, customizeResolution);
-        StreamResponseUtils.streamImage(response, wallpaperUrl, userAgent, i18nKey, width, height);
+        StreamResponseUtils.askMethod(response, wallpaperUrl, userAgent, i18nKey, width, height, askMethod);
+//        if (AskMethod.STREAM.equals(askMethod)) {
+//            StreamResponseUtils.streamImage(response, wallpaperUrl, userAgent, i18nKey, width, height, askMethod);
+//        }
+//        if (AskMethod.REDIRECT.equals(askMethod)) {
+//            StreamResponseUtils.urlStreamResponse(response, wallpaperUrl, userAgent, i18nKey, width, height, askMethod);
+//        }
+//        throw new WallpaperApiException("不支持的请求方式", 51000);
     }
 
     /**
@@ -64,7 +72,7 @@ public class BingServiceImpl implements BingService {
      * @param i18nKey
      */
     @Override
-    public void getRandomImage(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height) {
+    public void getRandomImage(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod) {
         List<BingWallpaperPO> list = null;
         BingJsonI18nEnum i18nEnum = null;
         if (StringUtils.isNotEmpty(i18nKey)) {
@@ -87,7 +95,7 @@ public class BingServiceImpl implements BingService {
         String appendUrl = AutoResolutionUtils.autoResolutionWallpaperUrl(userAgent, i18nEnum.name(), bingWallpaperPO.getUrl(), customizeResolution);
         bingWallpaperVO.setUrlList(Collections.singletonList(appendUrl));
         log.info("查询结果：{}", JSON.toJSONString(bingWallpaperVO));
-        StreamResponseUtils.streamImage(response, appendUrl, userAgent, i18nEnum.name(), width, height);
+        StreamResponseUtils.askMethod(response, appendUrl, userAgent, i18nKey, width, height, askMethod);
     }
 
     @Override

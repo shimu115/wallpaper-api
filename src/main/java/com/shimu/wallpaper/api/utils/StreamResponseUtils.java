@@ -2,7 +2,9 @@ package com.shimu.wallpaper.api.utils;
 
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.shimu.wallpaper.api.enums.ApiContains;
+import com.shimu.wallpaper.api.enums.AskMethod;
 import com.shimu.wallpaper.api.enums.BingJsonI18nEnum;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.model.response.BingResponse;
@@ -23,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Optional;
 
 /**
  * 图片流处理工具类
@@ -41,23 +44,9 @@ public class StreamResponseUtils {
         streamResponseUtils = this;
     }
 
-    public static void streamImage(HttpServletResponse response, String imageUrl, String userAgent, String i18nKey, Integer width, Integer height) {
-        BingService service = streamResponseUtils.bingService;
+    public static void streamImage(HttpServletResponse response, String imageUrl, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod) {
         log.info("请求图片 url：{}", imageUrl);
-        HttpURLConnection conn = null;
-        try {
-            conn = (HttpURLConnection) new URL(imageUrl).openConnection();
-            int status = conn.getResponseCode();
-            if (status != HttpURLConnection.HTTP_OK && !StringUtils.equals(imageUrl, getTodayWallpaperUrl(i18nKey))) {
-                log.error("对应链接可能已失效，默认展示今日壁纸，请求失败 url：{}", imageUrl);
-                service.getTodayWallpaper(response, userAgent, i18nKey, width, height);
-            } else if (status != HttpURLConnection.HTTP_OK && StringUtils.equals(imageUrl, getTodayWallpaperUrl(i18nKey))) {
-                throw new WallpaperApiException("请求失败，对应链接可能已失效，请刷新重试！", 50002);
-            }
-        } catch (IOException e) {
-            throw new WallpaperApiException(e);
-        }
-
+        HttpURLConnection conn = connectVerify(response, imageUrl, userAgent, i18nKey, width, height, askMethod);
         String contentType = conn.getContentType();
         int contentLength = conn.getContentLength();
 
@@ -78,8 +67,9 @@ public class StreamResponseUtils {
             double streamSizeMB = totalBytes / 1024.0 / 1024.0;
             log.info("图片 stream 大小: {} MB", String.format("%.2f", streamSizeMB));
         } catch (ClientAbortException e) {
+            double streamSizeMB = totalBytes / 1024.0 / 1024.0;
             log.warn("传输失败: {}, 失败原因: {}", imageUrl, e.getMessage());
-            throw new WallpaperApiException("客户端在传输过程中断开连接，图片未传输完毕: " + e.getMessage() + "已传输大小: " + String.format("%.2f", totalBytes / 1024.0 / 1024.0) + "MB", 50003);
+            throw new WallpaperApiException("客户端在传输过程中断开连接，图片未传输完毕: " + e.getMessage() + "已传输大小: " + String.format("%.2f", streamSizeMB) + "MB", 50003);
         } catch (IOException e) {
             throw new WallpaperApiException(e);
         } finally {
@@ -103,5 +93,55 @@ public class StreamResponseUtils {
         log.info("返回数据：{}", JSON.toJSONString(bing.getImages()));
         // 2. 拼接完整图片地址
         return "https://www.bing.com" + bing.getImages().get(0).getUrlBase() + "_{res}";
+    }
+
+    public static void urlStreamResponse(HttpServletResponse response, String imageUrl, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod, String json) {
+        response.setContentType("text/plain;charset=UTF-8");
+        connectVerify(response, imageUrl, userAgent, i18nKey, width, height, askMethod);
+        try {
+            response.getWriter().write(json != null ? json : imageUrl);
+        } catch (IOException e) {
+            throw new WallpaperApiException(e);
+        }
+    }
+
+    public static void urlStreamResponse(HttpServletResponse response, String imageUrl, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod) {
+        urlStreamResponse(response, imageUrl, userAgent, i18nKey, width, height, askMethod, null);
+    }
+
+    private static HttpURLConnection connectVerify(HttpServletResponse response, String imageUrl, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod) {
+        HttpURLConnection conn = null;
+        BingService service = streamResponseUtils.bingService;
+        try {
+            conn = (HttpURLConnection) new URL(imageUrl).openConnection();
+            int status = conn.getResponseCode();
+            if (status != HttpURLConnection.HTTP_OK && !StringUtils.equals(imageUrl, getTodayWallpaperUrl(i18nKey))) {
+                log.error("对应链接可能已失效，默认展示今日壁纸，请求失败 url：{}", imageUrl);
+                service.getTodayWallpaper(response, userAgent, i18nKey, width, height, askMethod);
+            } else if (status != HttpURLConnection.HTTP_OK && StringUtils.equals(imageUrl, getTodayWallpaperUrl(i18nKey))) {
+                log.error("对应链接可能已失效，请刷新重试！ url：{}", imageUrl);
+                throw new WallpaperApiException("请求失败，对应链接可能已失效，请刷新重试！", 50002);
+            }
+        } catch (IOException e) {
+            throw new WallpaperApiException(e);
+        }
+        return conn;
+    }
+
+    public static void askMethod(HttpServletResponse response, String imageUrl, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod) {
+        if (AskMethod.STREAM.equals(askMethod)) {
+            streamImage(response, imageUrl, userAgent, i18nKey, width, height, askMethod);
+            return;
+        }
+        if (AskMethod.REDIRECT.equals(askMethod)) {
+            urlStreamResponse(response, imageUrl, userAgent, i18nKey, width, height, askMethod);
+            return;
+        }
+        if (AskMethod.JSON.equals(askMethod)) {
+            ResultUtils<String> result = ResultUtils.success(imageUrl);
+            urlStreamResponse(response, imageUrl, userAgent, i18nKey, width, height, askMethod, JSON.toJSONString(result, SerializerFeature.WriteMapNullValue));
+            return;
+        }
+        throw new WallpaperApiException("不支持的请求方式", 51000);
     }
 }

@@ -1,5 +1,6 @@
 package com.shimu.wallpaper.api.services;
 
+import com.shimu.wallpaper.api.enums.AskMethod;
 import com.shimu.wallpaper.api.model.Page;
 import com.shimu.wallpaper.api.model.vo.BingWallpaperVO;
 import com.shimu.wallpaper.api.utils.PageUtils;
@@ -11,9 +12,9 @@ import java.util.Map;
 public interface BingService {
 
 
-    void getTodayWallpaper(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height);
+    void getTodayWallpaper(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod);
 
-    void getRandomImage(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height);
+    void getRandomImage(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod);
 
     Map<String, Object> getI18n();
 

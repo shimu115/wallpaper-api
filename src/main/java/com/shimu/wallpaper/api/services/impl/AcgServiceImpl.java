@@ -1,7 +1,7 @@
 package com.shimu.wallpaper.api.services.impl;
 
-import cn.hutool.http.HttpUtil;
 import com.shimu.wallpaper.api.enums.ApiContains;
+import com.shimu.wallpaper.api.enums.AskMethod;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.services.AcgService;
 import com.shimu.wallpaper.api.utils.StreamResponseUtils;
@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 /**
  * acg 图片业务代码
@@ -24,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class AcgServiceImpl implements AcgService {
     @Override
-    public void random(HttpServletResponse response, HttpServletRequest request) {
+    public void random(AskMethod askMethod, HttpServletResponse response, HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
         log.info("userAgent:{}", userAgent);
         HttpURLConnection conn = null;
@@ -47,12 +49,12 @@ public class AcgServiceImpl implements AcgService {
                 }
             }
         } catch (Exception e) {
-            throw new WallpaperApiException("请求失败", 51000);
+            throw new WallpaperApiException("请求失败", Optional.of(51000));
         } finally {
             if (conn != null) conn.disconnect();
         }
         String url = result.toString().trim();
         log.info("图片地址: {}", url);
-        StreamResponseUtils.streamImage(response, url, userAgent, "zh-CN", 1920, 1080);
+        StreamResponseUtils.askMethod(response, url, userAgent, "zh-CN", 1920, 1080, askMethod);
     }
 }
