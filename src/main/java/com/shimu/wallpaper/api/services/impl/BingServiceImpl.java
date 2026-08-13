@@ -57,13 +57,6 @@ public class BingServiceImpl implements BingService {
         Resolution customizeResolution = Resolution.builder().width(width).height(height).build();
         String wallpaperUrl = AutoResolutionUtils.autoResolutionWallpaperUrl(userAgent, i18nKey, todayWallpaperUrl, customizeResolution);
         StreamResponseUtils.askMethod(response, wallpaperUrl, userAgent, i18nKey, width, height, askMethod);
-//        if (AskMethod.STREAM.equals(askMethod)) {
-//            StreamResponseUtils.streamImage(response, wallpaperUrl, userAgent, i18nKey, width, height, askMethod);
-//        }
-//        if (AskMethod.REDIRECT.equals(askMethod)) {
-//            StreamResponseUtils.urlStreamResponse(response, wallpaperUrl, userAgent, i18nKey, width, height, askMethod);
-//        }
-//        throw new WallpaperApiException("不支持的请求方式", 51000);
     }
 
     /**
@@ -73,8 +66,8 @@ public class BingServiceImpl implements BingService {
      */
     @Override
     public void getRandomImage(HttpServletResponse response, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod) {
-        List<BingWallpaperPO> list = null;
-        BingJsonI18nEnum i18nEnum = null;
+        List<BingWallpaperPO> list;
+        BingJsonI18nEnum i18nEnum;
         if (StringUtils.isNotEmpty(i18nKey)) {
             i18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
             list = repository.findByI18nKey(i18nEnum.getKey());

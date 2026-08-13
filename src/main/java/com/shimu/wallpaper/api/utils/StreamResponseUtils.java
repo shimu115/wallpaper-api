@@ -110,7 +110,7 @@ public class StreamResponseUtils {
     }
 
     private static HttpURLConnection connectVerify(HttpServletResponse response, String imageUrl, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod) {
-        HttpURLConnection conn = null;
+        HttpURLConnection conn;
         BingService service = streamResponseUtils.bingService;
         try {
             conn = (HttpURLConnection) new URL(imageUrl).openConnection();
