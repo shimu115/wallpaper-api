@@ -37,7 +37,7 @@ data/
 .vscode/
 docs/docs/.vuepress/.temp/*
 docs/docs/.vuepress/.cache/*
-docs/docs/.vuepress/disk/*
+docs/docs/.vuepress/dist/*
 node_modules/
 
 ### VS Code ###
