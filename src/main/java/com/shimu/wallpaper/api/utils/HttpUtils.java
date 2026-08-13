@@ -59,10 +59,9 @@ public class HttpUtils {
     public static boolean isReachable(String url) {
         int retries = maxRetry != null ? maxRetry : 1;
         for (int i = 0; i < retries; i++) {
-            try {
-                HttpResponse response = HttpRequest.head(url)
-                        .timeout(5000)
-                        .execute();
+            try (HttpResponse response = HttpRequest.head(url)
+                    .timeout(5000)
+                    .execute()) {
                 int status = response.getStatus();
                 if (status >= 200 && status < 400) {
                     return true;

@@ -99,9 +99,9 @@ public class MirrorResolver {
                     log.info("从 {} 加载 mirror 缓存成功", CACHE_FILE);
                     return;
                 }
-                log.info("mirror 配置已变更或缓存为空，重新探测");
+                log.info("mirror 缓存与当前配置不匹配或缓存内容为空，将重新探测 mirror");
             } catch (IOException e) {
-                log.warn("读取 {} 失败: {}，重新探测", CACHE_FILE, e.getMessage());
+                log.warn("读取 mirror 缓存文件 {} 失败，将重新探测 mirror", CACHE_FILE, e);
             }
         }
 
@@ -180,9 +180,9 @@ public class MirrorResolver {
         try {
             String json = JSON.toJSONString(cache, true);
             Files.write(Paths.get(CACHE_FILE), json.getBytes(StandardCharsets.UTF_8));
-            log.info("mirror 缓存已写入 {}", CACHE_FILE);
+            log.info("写入 mirror 缓存文件 {} 失败", CACHE_FILE);
         } catch (IOException e) {
-            log.error("保存 {} 失败: {}", CACHE_FILE, e.getMessage());
+            log.error("写入 mirror 缓存文件 {} 失败", CACHE_FILE, e);
         }
     }
 
@@ -199,8 +199,9 @@ public class MirrorResolver {
                     log.info("从 {} 加载 default mirror 缓存成功", DEFAULT_CACHE_FILE);
                     return;
                 }
+                log.info("default mirror 缓存文件 {} 内容无效，将重新探测", DEFAULT_CACHE_FILE);
             } catch (IOException e) {
-                log.warn("读取 {} 失败: {}，重新探测", DEFAULT_CACHE_FILE, e.getMessage());
+                log.warn("读取 default mirror 缓存文件 {} 失败，将重新探测", DEFAULT_CACHE_FILE, e);
             }
         }
 
@@ -237,7 +238,7 @@ public class MirrorResolver {
                 log.info("default mirror 缓存已写入 {}", DEFAULT_CACHE_FILE);
             }
         } catch (IOException e) {
-            log.error("保存 {} 失败: {}", DEFAULT_CACHE_FILE, e.getMessage());
+            log.error("写入 default mirror 缓存文件 {} 失败", DEFAULT_CACHE_FILE, e);
         }
     }
 
