@@ -34,10 +34,6 @@ export const navbar = [
             {
                 text: 'wallpaper-api',
                 link: 'https://github.com/shimu115/wallpaper-api',
-            },
-            {
-                text: 'wallpaper-api-docs',
-                link: 'https://github.com/shimu115/wallpaper-api-docs',
             }
         ]
     }
