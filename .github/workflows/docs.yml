@@ -25,6 +25,18 @@ jobs:
       - name: 设置 npm 10.5.1
         run: npm install -g npm@10.5.1
 
+      - name: 检查项目结构
+        run: |
+          pwd
+          echo "=== root ==="
+          ls -la
+          echo "=== docs ==="
+          ls -la docs
+          echo "=== root package ==="
+          test -f package.json && cat package.json || echo "不存在"
+          echo "=== docs package ==="
+          cat docs/package.json
+
       - name: 安装 dependencies
         working-directory: docs
         run: npm ci
