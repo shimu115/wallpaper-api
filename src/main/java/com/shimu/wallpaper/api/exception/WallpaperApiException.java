@@ -1,6 +1,7 @@
 package com.shimu.wallpaper.api.exception;
 
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -9,12 +10,12 @@ import org.springframework.http.HttpStatus;
  * @version 1.0
  * @date 2024-03-31 12:24
  */
-@Data
+@Getter
 public class WallpaperApiException extends RuntimeException {
 
     private Object requestParam;
     private String message;
-    private Integer code;
+    private final Integer code;
 
     public WallpaperApiException(String message, Integer code) {
         super(message);
