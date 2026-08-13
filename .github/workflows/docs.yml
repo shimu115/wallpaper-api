@@ -36,7 +36,7 @@ jobs:
           echo "=== root package ==="
           test -f package.json && cat package.json || echo "不存在"
           echo "=== docs package ==="
-          cat docs/package.json
+          cat package.json
 
       - name: 安装 dependencies
         working-directory: docs
