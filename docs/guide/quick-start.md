@@ -6,3 +6,4 @@
     **若部署云服务器需注意 `askMethod` 请求方式为 `stream` 则依旧会消耗服务器流量，接口不传 `askMethod` 请求方式则默认使用 `stream` 响应方式**
 * 此处所有接口仅给出一个简单示例，详细参数请直接查看 [接口文档](../api/api.md)
 * 所有接口均为 `GET` 请求
+* `bing` 与 `acg` 接口均支持 **两种等价路径前缀**：`/bing/wallpaper/*` 可简写为 `/bing/*`，`/acg/wallpaper/*` 可简写为 `/acg/*`，详见 [接口调用说明](../api/api.md#多路径请求)

@@ -1,5 +1,7 @@
 # bing start
 
+> 所有接口均支持 **两种等价路径前缀**：`/bing/wallpaper/*` 与 `/bing/*`，下文以完整路径为例。
+
 ## bing 今日图片
 ~~~
 /api/bing/wallpaper/today

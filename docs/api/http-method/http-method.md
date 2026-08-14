@@ -1,5 +1,7 @@
 # API 请求方式
 
+> `bing` 与 `acg` 接口均支持 **两种等价路径前缀**：`/bing/wallpaper/*` 可简写为 `/bing/*`，`/acg/wallpaper/*` 可简写为 `/acg/*`，详见 [接口调用说明](../api.md#多路径请求)。
+
 | 请求方式 | 接口 | 描述 |
 | --- | --- | --- |
 | GET | /acg/wallpaper/random | [随机acg图片](../acg/acg.md#随机acg图片) |

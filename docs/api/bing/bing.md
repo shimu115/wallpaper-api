@@ -1,4 +1,7 @@
 # bing api
+
+> 所有接口均支持 `/bing/wallpaper/*` 与 `/bing/*` 两种等价路径前缀，任选其一即可（`@RequestMapping` 中多加了一种路径）。
+
 ## 今日壁纸
 
 ~~~

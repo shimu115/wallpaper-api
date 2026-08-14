@@ -1,4 +1,7 @@
 # acg start
+
+> 所有接口均支持 **两种等价路径前缀**：`/acg/wallpaper/*` 与 `/acg/*`，下文以完整路径为例。
+
 ## 随机acg图片
 ~~~
 /api/acg/wallpaper/random
