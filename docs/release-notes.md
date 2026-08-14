@@ -12,10 +12,6 @@
 
 具体参数参考 [接口文档](https://wpadoc.shimupersonal.top/api/bing/bing.html)
 
-### 修改
-
-- `askMethod` 参数 `redirect` 更名为 `url`（实际为返回图片 URL 文本，非 HTTP 302 跳转）
-
 ### 修复
 
 - 修正文档中 `SortEnum` 枚举值说明：`DESC=0`、`ASC=1`
