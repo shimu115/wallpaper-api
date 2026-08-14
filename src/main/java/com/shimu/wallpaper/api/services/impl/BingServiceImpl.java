@@ -6,6 +6,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
 import com.shimu.wallpaper.api.enums.AskMethod;
 import com.shimu.wallpaper.api.enums.BingJsonI18nEnum;
+import com.shimu.wallpaper.api.enums.Sort;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.mapper.BingWallpaperMapper;
 import com.shimu.wallpaper.api.model.Page;
@@ -97,10 +98,10 @@ public class BingServiceImpl implements BingService {
     }
 
     @Override
-    public Page<BingWallpaperVO> findPage(String i18nKey, Integer sort, Integer page, Integer pageSize) {
+    public Page<BingWallpaperVO> findPage(String i18nKey, Sort sort, Integer page, Integer pageSize) {
         BingJsonI18nEnum jsonI18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
         List<BingWallpaperPO> find = bingWallpaperMapper.findByI18nKey(jsonI18nEnum == null ? null : jsonI18nEnum.getKey());
-        List<BingWallpaperVO> bingWallpaperVOS = bingWallpaperPOList2VOList(find, sort);
+        List<BingWallpaperVO> bingWallpaperVOS = bingWallpaperPOList2VOList(find, sort.getValue());
         return PageUtils.buildPage(page, pageSize, bingWallpaperVOS.size(), bingWallpaperVOS);
     }
 

@@ -1,13 +1,12 @@
 package com.shimu.wallpaper.api.controller;
 
 import com.shimu.wallpaper.api.enums.AskMethod;
-import com.shimu.wallpaper.api.enums.SortEnum;
+import com.shimu.wallpaper.api.enums.Sort;
 import com.shimu.wallpaper.api.exception.WallpaperApiException;
 import com.shimu.wallpaper.api.model.Page;
 import com.shimu.wallpaper.api.model.vo.BingWallpaperVO;
 import com.shimu.wallpaper.api.services.BingService;
 import com.shimu.wallpaper.api.services.server.BingScheduledService;
-import com.shimu.wallpaper.api.utils.PageUtils;
 import com.shimu.wallpaper.api.utils.ResultUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,10 +49,7 @@ public class BingController {
                                   @RequestParam(required = false, defaultValue = "zh_CN") String i18nKey,
                                   @RequestParam(required = false, defaultValue = "1920") Integer width,
                                   @RequestParam(required = false, defaultValue = "1080") Integer height,
-                                  @RequestParam(required = false) AskMethod askMethod) {
-        if (ObjectUtils.isEmpty(askMethod)) {
-            askMethod = AskMethod.STREAM;
-        }
+                                  @RequestParam(required = false, defaultValue = "stream") AskMethod askMethod) {
         if (StringUtils.isEmpty(userAgent)) {
             throw new WallpaperApiException("请求头缺少 User-Agent 参数", 10001);
         }
@@ -73,7 +69,7 @@ public class BingController {
                                @RequestParam(required = false) String i18nKey,
                                @RequestParam(required = false, defaultValue = "1920") Integer width,
                                @RequestParam(required = false, defaultValue = "1080") Integer height,
-                               @RequestParam(required = false) AskMethod askMethod) {
+                               @RequestParam(required = false, defaultValue = "stream") AskMethod askMethod) {
         if (ObjectUtils.isEmpty(askMethod)) {
             askMethod = AskMethod.STREAM;
         }
@@ -117,11 +113,9 @@ public class BingController {
     @Operation(summary = "分页查询数据")
     @GetMapping("findPage")
     public ResultUtils<Page<BingWallpaperVO>> findPage(@RequestParam(required = false) String i18nKey,
-                                                       @RequestParam(required = false, defaultValue = "desc") String order,
+                                                       @RequestParam(required = false, defaultValue = "desc") Sort sort,
                                                        @RequestParam(required = false, defaultValue = "1") Integer page,
                                                        @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        Integer sort = EnumUtils.getEnum(SortEnum.class, order.toUpperCase(Locale.ROOT)) == null ?
-                null : EnumUtils.getEnum(SortEnum.class, order.toUpperCase(Locale.ROOT)).getValue();
         if (sort == null) {
             throw new WallpaperApiException("排序参数错误", 10002);
         }
@@ -147,8 +141,8 @@ public class BingController {
                                                    @RequestParam(required = false)
                                                    @DateTimeFormat(pattern = "yyyy-MM-dd") String endTime,
                                                    @RequestParam(required = false, defaultValue = "desc") String order) {
-        Integer sort = EnumUtils.getEnum(SortEnum.class, order.toUpperCase(Locale.ROOT)) == null ?
-                null : EnumUtils.getEnum(SortEnum.class, order.toUpperCase(Locale.ROOT)).getValue();
+        Integer sort = EnumUtils.getEnum(Sort.class, order.toUpperCase(Locale.ROOT)) == null ?
+                null : EnumUtils.getEnum(Sort.class, order.toUpperCase(Locale.ROOT)).getValue();
         if (sort == null) {
             throw new WallpaperApiException("排序参数错误", 10002);
         }

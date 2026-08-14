@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum AskMethod implements BaseEnum {
+public enum AskMethod implements BaseEnum<String> {
 
     URL("url"),
     STREAM("stream"),

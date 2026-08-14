@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum SortEnum {
+public enum Sort implements BaseEnum<Integer> {
 
     DESC(0),
     ASC(1)

@@ -26,13 +26,10 @@ public class AcgController {
     @GetMapping("/random")
     @Operation(summary = "随机图片")
     public void random(
-            @RequestParam(required = false) AskMethod askMethod,
+            @RequestParam(required = false, defaultValue = "stream") AskMethod askMethod,
             HttpServletResponse response,
             HttpServletRequest request
     ) {
-        if (ObjectUtils.isEmpty(askMethod)) {
-            askMethod = AskMethod.STREAM;
-        }
         acgService.random(askMethod, response, request);
     }
 }

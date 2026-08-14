@@ -1,6 +1,6 @@
 package com.shimu.wallpaper.api.enums;
 
-public interface BaseEnum {
+public interface BaseEnum<T> {
 
-    String getValue();
+    T getValue();
 }
