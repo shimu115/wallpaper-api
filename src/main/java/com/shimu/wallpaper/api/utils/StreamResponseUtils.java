@@ -129,19 +129,19 @@ public class StreamResponseUtils {
     }
 
     public static void askMethod(HttpServletResponse response, String imageUrl, String userAgent, String i18nKey, Integer width, Integer height, AskMethod askMethod) {
-        if (AskMethod.STREAM.equals(askMethod)) {
-            streamImage(response, imageUrl, userAgent, i18nKey, width, height, askMethod);
-            return;
+        switch (askMethod) {
+            case STREAM:
+                streamImage(response, imageUrl, userAgent, i18nKey, width, height, askMethod);
+                break;
+            case REDIRECT:
+                urlStreamResponse(response, imageUrl, userAgent, i18nKey, width, height, askMethod);
+                break;
+            case JSON:
+                ResultUtils<String> result = ResultUtils.success(imageUrl);
+                urlStreamResponse(response, imageUrl, userAgent, i18nKey, width, height, askMethod, JSON.toJSONString(result, SerializerFeature.WriteMapNullValue));
+                break;
+            default:
+                throw new WallpaperApiException("不支持的请求方式", 51000);
         }
-        if (AskMethod.REDIRECT.equals(askMethod)) {
-            urlStreamResponse(response, imageUrl, userAgent, i18nKey, width, height, askMethod);
-            return;
-        }
-        if (AskMethod.JSON.equals(askMethod)) {
-            ResultUtils<String> result = ResultUtils.success(imageUrl);
-            urlStreamResponse(response, imageUrl, userAgent, i18nKey, width, height, askMethod, JSON.toJSONString(result, SerializerFeature.WriteMapNullValue));
-            return;
-        }
-        throw new WallpaperApiException("不支持的请求方式", 51000);
     }
 }
