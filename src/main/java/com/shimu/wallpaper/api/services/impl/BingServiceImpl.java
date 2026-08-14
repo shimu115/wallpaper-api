@@ -101,12 +101,12 @@ public class BingServiceImpl implements BingService {
     public Page<BingWallpaperVO> findPage(String i18nKey, Sort sort, Integer page, Integer pageSize) {
         BingJsonI18nEnum jsonI18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
         List<BingWallpaperPO> find = bingWallpaperMapper.findByI18nKey(jsonI18nEnum == null ? null : jsonI18nEnum.getKey());
-        List<BingWallpaperVO> bingWallpaperVOS = bingWallpaperPOList2VOList(find, sort.getValue());
+        List<BingWallpaperVO> bingWallpaperVOS = bingWallpaperPOList2VOList(find, sort);
         return PageUtils.buildPage(page, pageSize, bingWallpaperVOS.size(), bingWallpaperVOS);
     }
 
     @Override
-    public List<BingWallpaperVO> find(String i18nKey, Integer dataId, String startTime, String endTime, Integer sort) {
+    public List<BingWallpaperVO> find(String i18nKey, Integer dataId, String startTime, String endTime, Sort sort) {
         BingJsonI18nEnum jsonI18nEnum = EnumUtils.getEnum(BingJsonI18nEnum.class, i18nKey);
         Long startMillis = null;
         Long endMillis = null;
@@ -129,14 +129,14 @@ public class BingServiceImpl implements BingService {
         return bingWallpaperPOList2VOList(resultPO, sort);
     }
 
-    private List<BingWallpaperVO> bingWallpaperPOList2VOList(List<BingWallpaperPO> po, Integer sort) {
+    private List<BingWallpaperVO> bingWallpaperPOList2VOList(List<BingWallpaperPO> po, Sort sort) {
         List<BingWallpaperVO> result = new ArrayList<>();
         for (BingWallpaperPO bingWallpaperPO : po) {
             BingWallpaperVO bingWallpaperVO = BeanUtil.copyProperties(bingWallpaperPO, BingWallpaperVO.class, "url");
             bingWallpaperVO.setUrlList(Collections.singletonList(bingWallpaperPO.getUrl()));
             result.add(bingWallpaperVO);
         }
-        if (sort == 0) {
+        if (sort.equals(Sort.DESC)) {
             // 降序排序
             return CollectionUtil.sort(result, Comparator.comparing(BingWallpaperVO::getDateTime).reversed());
         }

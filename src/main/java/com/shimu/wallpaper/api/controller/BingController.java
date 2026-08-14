@@ -129,7 +129,7 @@ public class BingController {
      * @param dataId
      * @param startTime
      * @param endTime
-     * @param order
+     * @param sort
      * @return
      */
     @Operation(summary = "查询数据")
@@ -140,12 +140,7 @@ public class BingController {
                                                    @DateTimeFormat(pattern = "yyyy-MM-dd") String startTime,
                                                    @RequestParam(required = false)
                                                    @DateTimeFormat(pattern = "yyyy-MM-dd") String endTime,
-                                                   @RequestParam(required = false, defaultValue = "desc") String order) {
-        Integer sort = EnumUtils.getEnum(Sort.class, order.toUpperCase(Locale.ROOT)) == null ?
-                null : EnumUtils.getEnum(Sort.class, order.toUpperCase(Locale.ROOT)).getValue();
-        if (sort == null) {
-            throw new WallpaperApiException("排序参数错误", 10002);
-        }
+                                                   @RequestParam(required = false, defaultValue = "desc") Sort sort) {
         List<BingWallpaperVO> result = bingService.find(i18nKey, dataId, startTime, endTime, sort);
         return ResultUtils.success(result);
     }

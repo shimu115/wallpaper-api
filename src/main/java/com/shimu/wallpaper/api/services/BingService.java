@@ -21,5 +21,5 @@ public interface BingService {
 
     Page<BingWallpaperVO> findPage(String i18nKey, Sort sort, Integer page, Integer pageSize);
 
-    List<BingWallpaperVO> find(String i18nKey, Integer dataId, String startTime, String endTime, Integer sort);
+    List<BingWallpaperVO> find(String i18nKey, Integer dataId, String startTime, String endTime, Sort sort);
 }
