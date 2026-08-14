@@ -14,6 +14,7 @@ docker run -d \
   --name wallpaper-api \
   --restart=unless-stopped \
   -e TASK_WALLPAPER_CRON="0 0 3 */1 * ?" \
+  -v ./data:/workspace/data \
   wallpaper-api:latest
 ~~~
 **docker compose 创建容器**
@@ -23,9 +24,11 @@ services:
     image: wallpaper-api:latest
     container_name: wallpaper-api
     ports:
-      - 9123:9123
+      - "9123:9123"
     environment:
       TASK_WALLPAPER_CRON: "0 0 3 */1 * ?"
+    volumes:
+      - ./data:/workspace/data
     restart: unless-stopped
 ~~~
 有更多的配置可查看 [application.yml](application.md)
