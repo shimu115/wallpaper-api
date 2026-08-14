@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @RestController
-@RequestMapping("bing/wallpaper")
+@RequestMapping({"bing/wallpaper", "/bing"})
 @Slf4j
 @Tag(name = "必应壁纸接口", description = "提供每日壁纸、随机壁纸等接口")
 public class BingController {

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/acg/wallpaper")
+@RequestMapping({"/acg/wallpaper", "/acg"})
 @Tag(name = "acg 图片", description = "随机 acg 图片")
 public class AcgController {
 
