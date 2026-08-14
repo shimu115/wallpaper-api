@@ -13,181 +13,43 @@
   <img src="https://img.shields.io/github/license/shimu115/wallpaper-api?color=green&logo=open-source-initiative" alt="License">
 </p>
 
+## 简介
 
-## 获取壁纸 api
-> 随机壁纸的数据来源于 [flow2000/bing-wallpaper-api](https://github.com/flow2000/bing-wallpaper-api/tree/master/data)
->
-> 端口：9123
+`wallpaper-api` 是一个壁纸接口服务，提供 **必应（Bing）每日 / 随机壁纸** 与 **随机 ACG 壁纸** 两类接口。接口可直接返回图片，也可返回图片直链或 JSON，方便直接作为前端的图片地址使用。
 
-### swagger 地址
-~~~http request
-http://localhost:9123/swagger-ui.html
-~~~
+- 必应随机壁纸数据来源于 [flow2000/bing-wallpaper-api](https://github.com/flow2000/bing-wallpaper-api/tree/master/data)
+- ACG 图片数据来源于 [loliapi](https://www.loliapi.com/docs/acg/)
 
-### api
+## 主要特性
 
-> 整体api前都需要加上 `/api`
+- 必应每日壁纸、随机壁纸（多语言、多分辨率）
+- 随机 ACG 壁纸
+- 三种返回方式：`stream`（图片流）、`url`（图片直链）、`json`
+- 根据 `User-Agent` 自动适配分辨率
+- 支持 Docker 部署
 
-#### bing
+## 快速开始
 
-##### 今日壁纸
-
-~~~
-/bing/wallpaper/today
-~~~
-
-**数据来源：** `https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN`
-
-> 请求头
-
-| header | description                               | default required |
-| ------ |-------------------------------------------| ---------- |
-| User-Agent | 使用设备自带的请求头，不可手动去除此请求头，接口需要使用此请求头自动调整图片分辨率 | true |
-
-> **暂未判断纯血鸿蒙设备的请求头，因为身边无人使用纯血鸿蒙设备，所以不知道默认ua是什么**
-> 为判断的设备均以默认的 1920x1080 分辨率处理
-
-> 参数说明
-
-| param   | description  | default required |
-|---------|--------------|------------------|
-| i18nKey | 语言（默认 zh_CN） | false |
-| width   | 宽度（默认1920）   | false |
-| height  | 高度（默认1080）   | false |
-
-##### 随机壁纸
-~~~
-/bing/wallpaper/random
-~~~
-
-> 请求头
-
-| header | description                               | default required |
-| ------ |-------------------------------------------| ---------- |
-| User-Agent | 使用设备自带的请求头，不可手动去除此请求头，接口需要使用此请求头自动调整图片分辨率 | true |
-
-> **暂未判断纯血鸿蒙设备的请求头，因为身边无人使用纯血鸿蒙设备，所以不知道默认ua是什么**
-> 为判断的设备均以默认的 1920x1080 分辨率处理
-
-> 参数说明
-
-| param   | description                               | default required |
-|---------|-------------------------------------------|------------------|
-| i18nKey | 默认使用所有国家图片进行随机,可使用参数见 BingJsonI18nKey 枚举说明 | false |
-| width   | 宽度（默认1920） | false |
-| height  | 高度（默认1080） | false |
-
-##### 手动刷新数据
-~~~
-/bing/wallpaper/fresh_data
-~~~
-
-##### 获取可使用的语言数据
-~~~
-/bing/wallpaper/getI18n
-~~~
-
-##### 分页查询数据
-~~~
-/bing/wallpaper/findPage
-~~~
-
-> 参数说明
-
-| param  | description                                | default required |
-|--------|--------------------------------------------|------------------|
-|i18nKey | 默认使用所有国家图片进行随机,可使用参数见 BingJsonI18nKey 枚举说明 | false |
-| order  | 排序（默认降序）, 参数见 SortEnum 枚举说明，传 key          | false |
-| page  | 页数（默认1）                                    | false |
-| pageSize | 每页数量（默认10）                                         | false |
-
-##### 查询数据
-~~~
-/bing/wallpaper/find
-~~~
-
-> 参数说明
-
-| param  | description                                | default required |
-|--------|--------------------------------------------|------------------|
-|i18nKey | 默认使用所有国家图片进行随机,可使用参数见 BingJsonI18nKey 枚举说明 | false |
-| dataId  | 按照 dataId （源数据的 id）查询                      | false |
-| startTime  | 起始时间，范围查询                                  | false |
-| endTime | 结束时间，范围查询                                  | false |
-| order  | 排序（默认降序）, 参数见 SortEnum 枚举说明，传 key          | false |
-
-#### acg
-
-##### 随机acg图片
-
-~~~
-/acg/wallpaper/random
-~~~
-
-> [数据来源](https://www.loliapi.com/docs/acg?type=url)
-> [文档](https://www.loliapi.com/docs/acg/)
-
-无需传参
-
-> 原接口通过请求头 `ua` 来自适应判断是手机还是电脑，自动返回相应图片的 url，然后通过返回的 url 使用流返回相应的图片，
-> 这样可以直接使用固定的地址直接再前端的 css 样式的 background-image: url() 引用随机图片地址
-
-#### 枚举说明
-##### BingJsonI18nKey 枚举说明
-
-| 代码    | 语言            | 国家/地区               |
-| ----- | ------------- | ------------------- |
-| de_DE | 德语 (German)   | 德国 (Germany)        |
-| en_CA | 英语 (English)  | 加拿大 (Canada)        |
-| en_GB | 英语 (English)  | 英国 (United Kingdom) |
-| en_IN | 英语 (English)  | 印度 (India)          |
-| en_US | 英语 (English)  | 美国 (United States)  |
-| fr_FR | 法语 (French)   | 法国 (France)         |
-| ja_JP | 日语 (Japanese) | 日本 (Japan)          |
-| zh_CN | 中文 (Chinese)  | 中国 (China)          |
-
-##### SortEnum 枚举说明
-| key | value | description |
-| --- | ----- | ----------- |
-| ASC | 0     | 升序       |
-| DESC | 1     | 降序       |
-
-
-## docker 构建与部署
-### 构建 docker 镜像
-**使用命令** 
-~~~ bash
-docker build -t wallpaper-api:latest .
-~~~
-> 可以查看下项目中的 application.yml 文件，如果想更改配置，可以再 `ENTRYPOINT` 这一行加上对应的配置参数
-> 例：
-> ~~~
-> # 刷新数据默认为 1 小时刷新一次，若改为每天凌晨 3 点刷新一次可以添加 -Dtask.wallpaper.cron="0 0 3 */1 * ?"
-> ENTRYPOINT ["java", "-Xms256m", "-Xmx512m", "-Dtask.wallpaper.cron=\"0 0 3 */1 * ?\"", "-jar", "/workspace/wallpaper-api.jar"]
-> ~~~
-> 具体怎么用可以自行搜索
-### 创建容器
-> **docker cli 创建容器**
-~~~bash
+```bash
 docker run -d \
   -p 9123:9123 \
   --name wallpaper-api \
   --restart=unless-stopped \
   wallpaper-api:latest
-~~~
-> **docker compose 创建容器**
-~~~yaml
-services:
-  wallpaper-api:
-    image: wallpaper-api:latest
-    container_name: wallpaper-api
-    ports:
-      - 9123:9123
-    restart: unless-stopped
-~~~
+```
+
+启动后访问 `http://localhost:9123/api/bing/wallpaper/random` 即可获取一张随机壁纸。
+
+> 镜像需先构建，或从 Docker Hub 拉取；具体见 [部署说明](https://wpadoc.shimupersonal.top/deploy/deploy.html)。
+
+## 文档
+
+- [接口文档（在线）](https://wpadoc.shimupersonal.top/)
+- [部署说明](https://wpadoc.shimupersonal.top/deploy/deploy.html)
+- 本地 Swagger / Knife4j：`http://localhost:9123/api/swagger-ui.html`（启动后访问）
 
 ## License
-This project is licensed under the [Apache License 2.0](LICENSE.txt).
+
+This project is licensed under the [Apache License 2.0](LICENSE).
 
 Copyright © 2025 Shimu
-
