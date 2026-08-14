@@ -21,10 +21,10 @@
 
 | param   | description                                                 | default required | default value |
 |---------|-------------------------------------------------------------|------------------| ---------- |
-| i18nKey | 语言，参考 [BingJsonI18nKey](../enum/enum.md#BingJsonI18nKey枚举说明) 说明，或参考 [获取可使用的语言数据](#获取可使用的语言数据) 接口 | false | zh_CN |
+| i18nKey | 语言，参考 [BingJsonI18nKey](../enum/enum.md#bingjsoni18nkey枚举说明) 说明，或参考 [获取可使用的语言数据](#获取可使用的语言数据) 接口 | false | zh_CN |
 | width   | 宽度                                                  | false | 1920 |
 | height  | 高度                                                  | false | 1080 |
-| askMethod | 返回方式，参考 [AskMethod](../enum/enum.md#AskMethod枚举说明) 枚举，传 value | false | stream |
+| askMethod | 返回方式，参考 [AskMethod](../enum/enum.md#askmethod枚举说明) 枚举，传 value | false | stream |
 
 ## 随机壁纸
 ~~~
@@ -45,10 +45,10 @@
 
 | param   | description                               | default required | default value |
 |---------|-------------------------------------------|------------------| ---------- |
-| i18nKey | 默认使用所有国家图片进行随机，参考 [BingJsonI18nKey](../enum/enum.md#BingJsonI18nKey枚举说明) 说明，或参考 [获取可使用的语言数据](#获取可使用的语言数据) 接口 | false | none |
+| i18nKey | 默认使用所有国家图片进行随机，参考 [BingJsonI18nKey](../enum/enum.md#bingjsoni18nkey枚举说明) 说明，或参考 [获取可使用的语言数据](#获取可使用的语言数据) 接口 | false | none |
 | width   | 宽度 | false | 1920 |
 | height  | 高度 | false | 1080 |
-| askMethod | 返回方式，参考 [AskMethod](../enum/enum.md#AskMethod枚举说明) 枚举，传 value | false | stream |
+| askMethod | 返回方式，参考 [AskMethod](../enum/enum.md#askmethod枚举说明) 枚举，传 value | false | stream |
 
 ## 手动刷新数据
 ~~~
@@ -61,9 +61,6 @@
 ~~~
 
 **[请求示例](http://localhost:9123/api/bing/wallpaper/getI18n)**
-~~~
-http://localhost:9123/api/bing/wallpaper/getI18n
-~~~
 
 **返回结果**
 ~~~json
@@ -103,14 +100,14 @@ http://localhost:9123/api/bing/wallpaper/getI18n
 
 | param  | description                                                                                         | default required | default value |
 |--------|-----------------------------------------------------------------------------------------------------|------------------|---------------|
-|i18nKey | 默认使用所有国家图片进行随机，参考 [BingJsonI18nKey](../enum/enum.md#BingJsonI18nKey枚举说明) 说明，或参考 [获取可使用的语言数据](#获取可使用的语言数据) 接口 | false | none          |
-| order  | 排序（默认降序）, 参数见 [SortEnum](../enum/enum.md#SortEnum枚举说明) 枚举说明，传 key，不区分大小写 | false | desc          |
+|i18nKey | 默认使用所有国家图片进行随机，参考 [BingJsonI18nKey](../enum/enum.md#bingjsoni18nkey枚举说明) 说明，或参考 [获取可使用的语言数据](#获取可使用的语言数据) 接口 | false | none          |
+| order  | 排序（默认降序）, 参数见 [SortEnum](../enum/enum.md#sortenum枚举说明) 枚举说明，传 key，不区分大小写 | false | desc          |
 | page  | 页数（默认1）                                                                                             | false | 1           |
 | pageSize | 每页数量（默认10）                                                                                          | false | 10           |
 
 **[请求示例](http://localhost:9123/api/bing/wallpaper/findPage?i18nKey=zh_CN&page=1&pageSize=10&order=desc)**
 ~~~
-http://localhost:9123/api/bing/wallpaper/findPage?i18nKey=zh_CN&page=1&pageSize=10&order=desc
+/api/bing/wallpaper/findPage?i18nKey=zh_CN&page=1&pageSize=10&order=desc
 ~~~
 
 **返回结果**
@@ -188,15 +185,15 @@ http://localhost:9123/api/bing/wallpaper/findPage?i18nKey=zh_CN&page=1&pageSize=
 
 | param  | description                                                   | default required | default value |
 |--------|---------------------------------------------------------------|------------------| ---------- |
-|i18nKey | 默认使用所有国家图片进行随机，参考 [BingJsonI18nKey](../enum/enum.md#BingJsonI18nKey枚举说明) 说明，或参考 [获取可使用的语言数据](#获取可使用的语言数据) 接口 | false | none |
+|i18nKey | 默认使用所有国家图片进行随机，参考 [BingJsonI18nKey](../enum/enum.md#bingjsoni18nkey枚举说明) 说明，或参考 [获取可使用的语言数据](#获取可使用的语言数据) 接口 | false | none |
 | dataId  | 按照 dataId （源数据的 id）查询                                         | false | none |
 | startTime  | 起始时间，范围查询                                                     | false | none |
 | endTime | 结束时间，范围查询                                                     | false | none |
-| order  | 排序（默认降序）, 参数见 [SortEnum](../enum/enum.md#SortEnum枚举说明) 枚举说明，传 key，不区分大小写                      | false | desc |
+| order  | 排序（默认降序）, 参数见 [SortEnum](../enum/enum.md#sortenum枚举说明) 枚举说明，传 key，不区分大小写                      | false | desc |
 
 **[请求示例](http://localhost:9123/api/bing/wallpaper/find?i18nKey=zh_CN&startTime=2025-10-01&endTime=2025-10-31&order=desc)**
 ~~~
-http://localhost:9123/api/bing/wallpaper/find?i18nKey=zh_CN&startTime=2025-10-01&endTime=2025-10-31&order=desc
+/api/bing/wallpaper/find?i18nKey=zh_CN&startTime=2025-10-01&endTime=2025-10-31&order=desc
 ~~~
 **返回结果**
 ~~~json

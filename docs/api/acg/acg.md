@@ -12,7 +12,7 @@
 
 | param     | description                                                  | default required | default value |
 |-----------|--------------------------------------------------------------|------------------|---------------|
-| askMethod | 返回方式，参考 [AskMethod](../enum/enum.md#AskMethod枚举说明) 枚举，传 value | false | stream |
+| askMethod | 返回方式，参考 [AskMethod](../enum/enum.md#askmethod枚举说明) 枚举，传 value | false | stream |
 
 `User-Agent` 请求头为可选，若携带会转发给上游 `loliapi` 用于自适应返回手机/电脑对应的图片地址（不携带也能正常返回）
 

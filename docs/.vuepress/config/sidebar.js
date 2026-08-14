@@ -18,7 +18,8 @@ export const sidebar = {
                 '/api/api.md',
                 '/api/bing/bing.md',
                 '/api/acg/acg.md',
-                '/api/enum/enum.md'
+                '/api/enum/enum.md',
+                '/api/ask-method/ask-method.md'
             ]
         }
     ],

@@ -2,22 +2,19 @@
 
 ## bing 今日图片
 ~~~
-http://localhost:9123/api/bing/wallpaper/today
+/api/bing/wallpaper/today
 ~~~
 [查看结果](http://localhost:9123/api/bing/wallpaper/today)
 
+> 可通过 `askMethod` 参数控制返回方式（今日图片同理），取值参考 [AskMethod 枚举说明](../api/enum/enum.md#askmethod枚举说明)
+
 ## bing 随机图片
 ~~~
-http://localhost:9123/api/bing/wallpaper/random
+/api/bing/wallpaper/random
 ~~~
 [查看结果](http://localhost:9123/api/bing/wallpaper/random)
 
-> `askMethod` 控制返回方式（今日图片同理）：
-> - `stream`（默认）：直接返回图片流
-> - `url`：返回图片直链 URL 文本
-> - `json`：返回 JSON 包装 `{"code":200,"msg":null,"data":"<url>"}`
->
-> 例：`http://localhost:9123/api/bing/wallpaper/random?askMethod=json`
+> 可通过 `askMethod` 参数控制返回方式（今日图片同理），取值参考 [AskMethod 枚举说明](../api/enum/enum.md#askmethod枚举说明)
 
 ## 手动刷新数据
 ~~~
@@ -34,7 +31,7 @@ http://localhost:9123/api/bing/wallpaper/random
 
 ## 获取可使用的语言数据
 ~~~
-http://localhost:9123/api/bing/wallpaper/getI18n
+/api/bing/wallpaper/getI18n
 ~~~
 **返回结果**
 ~~~json
@@ -96,7 +93,7 @@ http://localhost:9123/api/bing/wallpaper/getI18n
 
 ## 分页查询数据
 ~~~
-http://localhost:9123/api/bing/wallpaper/findPage
+/api/bing/wallpaper/findPage
 ~~~
 **返回结果**
 ~~~
@@ -166,7 +163,7 @@ http://localhost:9123/api/bing/wallpaper/findPage
 
 ## 查询数据
 ~~~
-http://localhost:9123/api/bing/wallpaper/find
+/api/bing/wallpaper/find
 ~~~
 **请求结果**
 ~~~
