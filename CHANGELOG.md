@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2026-08-15
+
+### Changed
+
+- `findPage` 与 `find` 接口的排序查询参数由字符串 `order` 改为枚举类型 `sort`，原 `SortEnum` 枚举重命名为 `Sort`；取值为 `desc`（降序，默认）和 `asc`（升序），不区分大小写
+- 泛化通用枚举转换器：`BaseEnum<T>` 接口支持任意返回值类型，`BaseEnumConverter` / `BaseEnumConverterFactory` 支持任意 `Enum` 类型
+- `askMethod` 参数使用 `defaultValue = "stream"` 声明默认值，移除冗余的空值判断
+- 优化枚举转换失败时的异常提示，由英文 `invalid value` 改为中文 `传参错误`，提示更加友好明确
+
+#### CI/CD
+
+- 优化 Docs CI 部署流程，仅在 `docs/**` 发生变更时触发文档部署
+
 ## [1.2.0] - 2026-08-14
 
 ### Added
@@ -53,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 发布可执行 JAR 包 `wallpaper-api-1.0.0.jar`
 - 发布无依赖 JAR 包 `wallpaper-api-1.0.0-exec.jar`
 
+[1.2.1]: https://github.com/shimu115/wallpaper-api/releases/tag/v1.2.1
 [1.2.0]: https://github.com/shimu115/wallpaper-api/releases/tag/v1.2.0
 [1.1.0]: https://github.com/shimu115/wallpaper-api/releases/tag/v1.1.0
 [1.0.1]: https://github.com/shimu115/wallpaper-api/releases/tag/v1.0.1

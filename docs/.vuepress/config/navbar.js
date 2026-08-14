@@ -15,8 +15,12 @@ export const navbar = [
         text: 'Release Notes',
         children: [
             {
-                text: 'v1.2.0-latest',
-                link: '/release-notes.md#v1-2-0-latest-2026-08-14'
+                text: 'v1.2.1-latest',
+                link: '/release-notes.md#v1-2-1-latest-2026-08-15'
+            },
+            {
+                text: 'v1.2.0',
+                link: '/release-notes.md#v1-2-0-2026-08-14'
             },
             {
                 text: 'v1.1.0',

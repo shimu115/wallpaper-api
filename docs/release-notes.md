@@ -1,6 +1,19 @@
 # Release Notes
 
-## v1.2.0 - latest (2026-08-14)
+## v1.2.1 - latest (2026-08-15)
+
+### 修改
+
+- `findPage` 与 `find` 接口的排序查询参数由字符串 `order` 改为枚举类型 `sort`，原 `SortEnum` 枚举重命名为 `Sort`；取值为 `desc`（降序，默认）和 `asc`（升序），不区分大小写
+- 泛化通用枚举转换器：`BaseEnum<T>` 接口支持任意返回值类型，`BaseEnumConverter` / `BaseEnumConverterFactory` 支持任意 `Enum` 类型
+- `askMethod` 参数使用 `defaultValue = "stream"` 声明默认值，移除冗余的空值判断
+- 优化枚举转换失败时的异常提示，由英文 `invalid value` 改为中文 `传参错误`，提示更加友好明确
+
+#### CI/CD
+
+- 优化 Docs CI 部署流程，仅在 `docs/**` 发生变更时触发文档部署
+
+## v1.2.0 (2026-08-14)
 
 ### 新增
 
