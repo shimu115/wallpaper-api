@@ -12,6 +12,13 @@ http://localhost:9123/api/bing/wallpaper/random
 ~~~
 [查看结果](http://localhost:9123/api/bing/wallpaper/random)
 
+> `askMethod` 控制返回方式（今日图片同理）：
+> - `stream`（默认）：直接返回图片流
+> - `url`：返回图片直链 URL 文本
+> - `json`：返回 JSON 包装 `{"code":200,"msg":null,"data":"<url>"}`
+>
+> 例：`http://localhost:9123/api/bing/wallpaper/random?askMethod=json`
+
 ## 手动刷新数据
 ~~~
 /bing/wallpaper/fresh_data

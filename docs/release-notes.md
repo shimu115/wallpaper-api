@@ -1,6 +1,26 @@
 # Release Notes
 
-## v1.1.0 - latest (2025-10-23)
+## v1.2.0 - latest (2026-08-14)
+
+### 新增
+
+图片接口（今日壁纸、随机壁纸、随机 acg 图片）新增 `askMethod` 参数，支持三种返回方式：
+
+- `stream`（默认）：直接返回图片二进制流
+- `url`：返回图片直链 URL 纯文本
+- `json`：返回 JSON 包装 `{"code":200,"msg":null,"data":"<url>"}`
+
+具体参数参考 [接口文档](https://wpadoc.shimupersonal.top/api/bing/bing.html)
+
+### 修改
+
+- `askMethod` 参数 `redirect` 更名为 `url`（实际为返回图片 URL 文本，非 HTTP 302 跳转）
+
+### 修复
+
+- 修正文档中 `SortEnum` 枚举值说明：`DESC=0`、`ASC=1`
+
+## v1.1.0 (2025-10-23)
 
 ### 新增接口
 

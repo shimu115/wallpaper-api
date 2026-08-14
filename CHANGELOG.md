@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-08-14
+
+### Added
+
+- 图片接口（今日壁纸、随机壁纸、随机 acg 图片）新增 `askMethod` 参数，支持三种返回方式：`stream`（图片流，默认）、`url`（图片直链 URL 文本）、`json`（JSON 包装）
+
+### Changed
+
+- `askMethod` 参数 `redirect` 更名为 `url`（实际行为是返回图片 URL 文本，并非 HTTP 302 跳转）
+
+### Fixed
+
+- 修正文档中 `SortEnum` 枚举值说明：`DESC=0`、`ASC=1`（此前文档写反）
+
 ## [1.1.0] - 2025-10-27
 
 ### Added
@@ -43,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 发布可执行 JAR 包 `wallpaper-api-1.0.0.jar`
 - 发布无依赖 JAR 包 `wallpaper-api-1.0.0-exec.jar`
 
+[1.2.0]: https://github.com/shimu115/wallpaper-api/releases/tag/v1.2.0
 [1.1.0]: https://github.com/shimu115/wallpaper-api/releases/tag/v1.1.0
 [1.0.1]: https://github.com/shimu115/wallpaper-api/releases/tag/v1.0.1
 [1.0.0-alpha]: https://github.com/shimu115/wallpaper-api/releases/tag/v1.0.0

@@ -24,6 +24,7 @@
 | i18nKey | 语言，参考 [BingJsonI18nKey](../enum/enum.md#BingJsonI18nKey枚举说明) 说明，或参考 [获取可使用的语言数据](#获取可使用的语言数据) 接口 | false | zh_CN |
 | width   | 宽度                                                  | false | 1920 |
 | height  | 高度                                                  | false | 1080 |
+| askMethod | 返回方式，参考 [AskMethod](../enum/enum.md#AskMethod枚举说明) 枚举，传 value | false | stream |
 
 ## 随机壁纸
 ~~~
@@ -47,6 +48,7 @@
 | i18nKey | 默认使用所有国家图片进行随机，参考 [BingJsonI18nKey](../enum/enum.md#BingJsonI18nKey枚举说明) 说明，或参考 [获取可使用的语言数据](#获取可使用的语言数据) 接口 | false | none |
 | width   | 宽度 | false | 1920 |
 | height  | 高度 | false | 1080 |
+| askMethod | 返回方式，参考 [AskMethod](../enum/enum.md#AskMethod枚举说明) 枚举，传 value | false | stream |
 
 ## 手动刷新数据
 ~~~
