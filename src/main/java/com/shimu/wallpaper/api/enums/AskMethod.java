@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum AskMethod implements BaseEnum {
 
-    REDIRECT("redirect"),
+    URL("url"),
     STREAM("stream"),
     JSON("json")
     ;

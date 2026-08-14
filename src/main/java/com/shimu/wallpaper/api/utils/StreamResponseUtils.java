@@ -133,7 +133,7 @@ public class StreamResponseUtils {
             case STREAM:
                 streamImage(response, imageUrl, userAgent, i18nKey, width, height, askMethod);
                 break;
-            case REDIRECT:
+            case URL:
                 urlStreamResponse(response, imageUrl, userAgent, i18nKey, width, height, askMethod);
                 break;
             case JSON:
