@@ -26,7 +26,7 @@ public class Knife4jConfig {
                         .version(VersionProperties.getVersion()) // 在这里设置版本
                         .contact(new Contact()
                                 .name("shimu")
-                                .email("shimuspace@email.com")
+                                .email("shimu@shimupersonal.top")
                                 .url("https://github.com/shimu115/wallpaper-api"))
                         .license(license())
                 );
@@ -39,15 +39,6 @@ public class Knife4jConfig {
                 .group("Wallpaper API")
                 .pathsToMatch("/api/**")
                 .packagesToScan("com.shimu.wallpaper.api.controller")
-//                .addOpenApiCustomiser(openApi -> openApi.info(new Info()
-//                        .license(license())
-//                        .title("Wallpaper API 文档")
-//                        .description("提供壁纸相关接口")
-//                        .version(VersionProperties.getVersion())
-//                        .contact(new Contact()
-//                                .name("shimu")
-//                                .email("shimuspace@email.com")
-//                                .url("https://github.com/shimu115/wallpaper-api"))))
                 .build();
     }
 
@@ -56,24 +47,4 @@ public class Knife4jConfig {
                 .name("Apache License 2.0")
                 .url("https://github.com/shimu115/wallpaper-api/blob/main/LICENSE");
     }
-
-//    @Bean
-//    public Docket api() {
-//        return new Docket(DocumentationType.SWAGGER_2)
-//                .apiInfo(apiInfo())
-//                .select()
-//                // 指定扫描 controller 包路径
-//                .apis(RequestHandlerSelectors.basePackage("com.shimu.wallpaper.api"))
-//                .paths(PathSelectors.any())
-//                .build();
-//    }
-//
-//    private ApiInfo apiInfo() {
-//        log.info("wallpaper api version is {}", VersionProperties.getVersion());
-//        return new ApiInfoBuilder()
-//                .title("Wallpaper API 文档")
-//                .description("Bing 壁纸接口服务文档，支持多语言与 SQLite 持久化存储")
-//                .version(VersionProperties.getVersion())
-//                .build();
-//    }
 }
