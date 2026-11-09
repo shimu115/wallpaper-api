@@ -1,0 +1,120 @@
+# Release Notes
+
+## v1.2.1 - latest (2026-08-15)
+
+### 修改
+
+- `findPage` 与 `find` 接口的排序查询参数由字符串 `order` 改为枚举类型 `sort`，原 `SortEnum` 枚举重命名为 `Sort`；取值为 `desc`（降序，默认）和 `asc`（升序），不区分大小写
+- 泛化通用枚举转换器：`BaseEnum<T>` 接口支持任意返回值类型，`BaseEnumConverter` / `BaseEnumConverterFactory` 支持任意 `Enum` 类型
+- `askMethod` 参数使用 `defaultValue = "stream"` 声明默认值，移除冗余的空值判断
+- 优化枚举转换失败时的异常提示，由英文 `invalid value` 改为中文 `传参错误`，提示更加友好明确
+
+#### CI/CD
+
+- 优化 Docs CI 部署流程，仅在 `docs/**` 发生变更时触发文档部署
+
+## v1.2.0 (2026-08-14)
+
+### 新增
+
+图片接口（今日壁纸、随机壁纸、随机 acg 图片）新增 `askMethod` 参数，支持三种返回方式：
+
+- `stream`（默认）：直接返回图片二进制流
+- `url`：返回图片直链 URL 纯文本
+- `json`：返回 JSON 包装 `{"code":200,"msg":null,"data":"<url>"}`
+
+具体参数参考 [接口文档](https://wpadoc.shimupersonal.top/api/bing/bing.html)
+
+### 修复
+
+- 修正文档中 `SortEnum` 枚举值说明：`DESC=0`、`ASC=1`
+
+## v1.1.0 (2025-10-23)
+
+### 新增接口
+
+#### 获取可使用的语言数据
+~~~
+/bing/wallpaper/getI18n
+~~~
+
+#### 分页查询数据
+~~~
+/bing/wallpaper/findPage
+~~~
+
+> 参数说明
+
+| param  | description                                | default required |
+|--------|--------------------------------------------|------------------|
+|i18nKey | 默认使用所有国家图片进行随机,可使用参数见 BingJsonI18nKey 枚举说明 | false |
+| order  | 排序（默认降序）, 参数见 SortEnum 枚举说明，传 key          | false |
+| page  | 页数（默认1）                                    | false |
+| pageSize | 每页数量（默认10）                                         | false |
+
+#### 查询数据
+~~~
+/bing/wallpaper/find
+~~~
+
+> 参数说明
+
+| param  | description                                | default required |
+|--------|--------------------------------------------|------------------|
+|i18nKey | 默认使用所有国家图片进行随机,可使用参数见 BingJsonI18nKey 枚举说明 | false |
+| dataId  | 按照 dataId （源数据的 id）查询                      | false |
+| startTime  | 起始时间，范围查询                                  | false |
+| endTime | 结束时间，范围查询                                  | false |
+| order  | 排序（默认降序）, 参数见 SortEnum 枚举说明，传 key          | false |
+
+### 修改接口
+
+#### 今日壁纸，随机壁纸
+
+通过 ua 判断自动分配相应分辨率，**ua必传**
+
+新增 i18nKey，width，height 入参字段，全为非必传参数，具体参考 [接口文档](https://wpadoc.shimupersonal.top/api/bing/bing.html)
+
+## v1.0.1 (2025-10-11)
+
+### 修改 `bing` 随机图片接口逻辑
+`v1.0.0` 版本在刷新数据时只会向 `SQLite` 数据库中添加数据，并不是真正意义上的刷新数据，此次修改了这个问题
+
+### 修改默认 `banner`
+此次也修改了项目的默认启动 `banner`
+
+### 日志调整
+新增了一些日志输出
+
+### 新增接口
+* **手动刷新bing壁纸数据库**
+  ~~~
+  /bing/wallpaper/fresh_data
+  ~~~
+
+* **新增 acg 随机图片接口**
+  ~~~
+  /acg/wallpaper/random
+  ~~~
+  
+**具体参数请查看文档**
+
+## v1.0.0-alpha - Pre-release (2025-10-3)
+
+### 新增 bing 壁纸 api
+* 今日壁纸
+  ~~~
+  bing/wallpaper/today
+  ~~~
+
+* 随机壁纸
+  ~~~
+  bing/wallpaper/random
+  ~~~
+
+**接口详情见 readme.md 文档**
+
+### release 文件
+`wallpaper-api-1.0.0.jar` 为可执行 jar 包
+
+`wallpaper-api-1.0.0-exec.jar` 为不带依赖的 jar 包
