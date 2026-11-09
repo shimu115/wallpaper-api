@@ -18,11 +18,6 @@ RUN --mount=type=cache,target=/root/.m2 \
 RUN --mount=type=cache,target=/root/.m2 \
     mvn clean package -DskipTests -B
 
-#RUN mvn clean package \
-#    -DskipTests \
-#    -Drevision=${VERSION} \
-#    -B
-
 FROM szopen/openjdk:8-jdk-alpine
 
 WORKDIR /workspace
