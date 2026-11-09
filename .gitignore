@@ -38,8 +38,8 @@ data/
 docs/.vuepress/.temp/*
 docs/.vuepress/.cache/*
 docs/.vuepress/dist/*
-vitepress/.vitepress/cache/
-vitepress/.vitepress/dist/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
 node_modules/
 
 ### openidea ###
