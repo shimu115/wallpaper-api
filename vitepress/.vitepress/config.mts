@@ -31,7 +31,12 @@ export default defineConfig({
   description: 'wallpaper api 文档说明',
   // 文档中的请求示例指向本地启动的服务，构建时忽略这类链接检查
   ignoreDeadLinks: [/^http:\/\/localhost:9123/],
+  // release-notes 目录下的版本内容仅作为片段被 release-notes.md 引入，不单独生成页面
+  srcExclude: ['release-notes/*.md'],
   themeConfig: {
+    search:{
+      provider: 'local'
+    },
     nav: [
       {
         text: 'docs',
