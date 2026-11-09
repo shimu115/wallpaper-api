@@ -33,21 +33,16 @@ jobs:
       - name: 检查项目结构
         run: |
           pwd
-          echo "=== root ==="
-          ls -la
           echo "=== docs ==="
           ls -la docs
-          cd docs
-          echo "=== root package ==="
-          test -f package.json && cat package.json || echo "不存在"
           echo "=== docs package ==="
-          cat package.json
+          cat docs/package.json
 
       - name: 安装 dependencies
         working-directory: docs
         run: npm install
 
-      - name: 构建 VuePress 站点
+      - name: 构建 VitePress 站点
         working-directory: docs
         run: npm run docs:build
 
@@ -55,6 +50,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: docs/.vuepress/dist
+          publish_branch: vp-page
+          publish_dir: docs/.vitepress/dist
           cname: wpadoc.shimupersonal.top
