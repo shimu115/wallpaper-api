@@ -1,0 +1,2 @@
+org.springframework.context.ApplicationContextInitializer=\
+com.shimu.wallpaper.api.config.DataDirInitializer
