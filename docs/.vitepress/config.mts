@@ -39,22 +39,9 @@ export default defineConfig({
     },
     nav: [
       {
-        text: 'docs',
-        items: [
-          { text: '快速开始', items: guideItems },
-          { text: 'wallpaper api 文档说明', items: apiItems },
-          { text: '部署方式', items: deployItems },
-          { text: 'Release Notes', items: releaseNotesItems }
-        ]
-      },
-      {
         text: 'Release Notes',
         items: [
-          { text: 'v1.2.1-latest', link: '/release-notes#v1-2-1-latest-2026-08-15' },
-          { text: 'v1.2.0', link: '/release-notes#v1-2-0-2026-08-14' },
-          { text: 'v1.1.0', link: '/release-notes#v1-1-0-2025-10-23' },
-          { text: 'v1.0.1', link: '/release-notes#v1-0-1-2025-10-11' },
-          { text: 'v1.0.0-alpha', link: '/release-notes#v1-0-0-alpha-pre-release-2025-10-3' }
+          { text: 'v1.2.1-latest', link: '/release-notes#v1-2-1-latest-2026-08-15' }
         ]
       },
       {
@@ -65,12 +52,11 @@ export default defineConfig({
       }
     ],
 
-    sidebar: {
-      '/guide/': [{ text: '快速开始', collapsed: false, items: guideItems }],
-      '/api/': [{ text: 'wallpaper api 文档说明', collapsed: false, items: apiItems }],
-      '/deploy/': [{ text: '部署方式', collapsed: false, items: deployItems }],
-      '/release-notes': [{ text: 'Release Notes', collapsed: false, items: releaseNotesItems }]
-    },
+    sidebar: [
+      { text: '快速开始', collapsed: true, items: guideItems },
+      { text: 'wallpaper api 文档说明', collapsed: true, items: apiItems },
+      { text: '部署方式', collapsed: true, items: deployItems }
+    ],
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/shimu115/wallpaper-api' }
