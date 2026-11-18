@@ -6,18 +6,15 @@ hero:
   name: wallpaper api docs
   text: wallpaper api 文档说明
   actions:
-    - theme: alt
+    - theme: brand
       text: 快速开始
       link: /guide/quick-start
-    - theme: brand
-      text: api 文档
-      link: /api/api
     - theme: alt
-      text: 项目部署
-      link: /deploy/deploy
-    - theme: brand
       text: Release Notes
       link: /release-notes
+    - theme: alt
+      text: GitHub
+      link: https://github.com/shimu115/wallpaper-api
 
 features:
   - title: 快速开始
